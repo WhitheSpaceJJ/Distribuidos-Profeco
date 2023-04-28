@@ -13,4 +13,5 @@ public interface IProductoServicio {
     public Producto actualizarProducto(Producto supermercado);
 
     public void eliminarProducto(Long id);
+    
 }

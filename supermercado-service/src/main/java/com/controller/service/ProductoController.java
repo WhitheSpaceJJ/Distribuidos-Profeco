@@ -4,7 +4,6 @@ import com.supermercado.service.servicio.IProductoServicio;
 import com.supermercado.service.servicio.ISupermercadoServicio;
 import com.supermercadoservice.model.Producto;
 import com.supermercadoservice.model.Supermercado;
-import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -89,5 +88,7 @@ public class ProductoController {
         }
         return ResponseEntity.ok(productoOptional);
     }
+    
+    
 
 }

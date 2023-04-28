@@ -1,8 +1,12 @@
 package com.controller.service;
 
+import com.supermercado.service.servicio.IComentarioServicio;
+import com.supermercado.service.servicio.IProductoServicio;
 import com.supermercado.service.servicio.ISupermercadoServicio;
+import com.supermercadoservice.model.Producto;
 import com.supermercadoservice.model.Supermercado;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,17 +24,17 @@ public class SupermercadoController {
 
     @Autowired
     private ISupermercadoServicio supermercadoServicio;
-    
- 
 
-//    @Autowired
-//    private IInventarioClient inventarioClient;
-    
+
+    @GetMapping
+    public ResponseEntity<List<Supermercado>> listarSupermercados() {
+        List<Supermercado> supermercados = supermercadoServicio.listarTodosLosSupermercados();
+        return ResponseEntity.ok(supermercados);
+    }
+
     @PostMapping
     public ResponseEntity<Supermercado> agregarSupermercado(@RequestBody Supermercado supermercado) {
         Supermercado supermercadoGuardado = supermercadoServicio.guardarSupermercado(supermercado);
-
-        
 
         return ResponseEntity.ok(supermercadoGuardado);
     }
@@ -61,11 +65,6 @@ public class SupermercadoController {
         return ResponseEntity.ok(supermercadoOptional);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Supermercado>> listarSupermercados() {
-        return ResponseEntity.ok(supermercadoServicio.listarTodosLosSupermercados());
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Supermercado> encontrarSupermercadoPorId(@PathVariable Long id) {
         Supermercado supermercadoOptional = supermercadoServicio.obtenerSupermercadoPorId(id);
@@ -75,13 +74,5 @@ public class SupermercadoController {
 
         return ResponseEntity.ok(supermercadoOptional);
     }
-
-//    @GetMapping("/inventario")
-//    public List<Supermercado> findAllWithInventario() {
-//        List<Supermercado> supermercados = supermercadoServicio.listarTodosLosSupermercados();
-//
-//        supermercados.forEach(department -> department.setInventario(inventarioClient.findBySupermercado(department.getId())));
-//        return supermercados;
-//    }
 
 }

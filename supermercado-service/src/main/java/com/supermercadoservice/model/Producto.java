@@ -4,6 +4,7 @@
  */
 package com.supermercadoservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import jakarta.persistence.Entity;
@@ -17,6 +18,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "productos")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Producto {
 
     @Id
@@ -31,6 +33,7 @@ public class Producto {
     @JsonProperty(access = Access.WRITE_ONLY)
     private Supermercado supermercado;
 
+    
     public Producto() {
 
     }
@@ -43,6 +46,7 @@ public class Producto {
         this.stock = stock;
         this.supermercado = supermercado;
     }
+    
 
     public Long getId() {
         return id_productos;

@@ -36,4 +36,6 @@ public class ProductoServicio implements IProductoServicio{
     public void eliminarProducto(Long id) {
         repositorio.deleteById(id);
     }
+    
+    
 }

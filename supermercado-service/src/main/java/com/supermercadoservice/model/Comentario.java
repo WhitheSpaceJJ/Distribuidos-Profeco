@@ -4,6 +4,7 @@
  */
 package com.supermercadoservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,6 +18,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name= "comentarios")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Comentario {
     
     @Id
@@ -28,7 +30,7 @@ public class Comentario {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "supermercado_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Long supermercado_id;
+    private Supermercado supermercado;
     
     private String mensaje;
 
@@ -37,10 +39,10 @@ public class Comentario {
         
     }
     
-    public Comentario(Long id, Long usuarioId, Long supermercado_id, String mensaje) {
+    public Comentario(Long id, Long usuarioId, Supermercado supermercado, String mensaje) {
         this.id_comentarios = id;
         this.usuarioId = usuarioId;
-        this.supermercado_id = supermercado_id;
+        this.supermercado = supermercado;
         this.mensaje = mensaje;
     }
 
@@ -60,12 +62,12 @@ public class Comentario {
         this.usuarioId = usuarioId;
     }
 
-    public Long getSupermercadoId() {
-        return supermercado_id;
+    public Supermercado getSupermercado() {
+        return supermercado;
     }
 
-    public void setSupermercadoId(Long supermercado_id) {
-        this.supermercado_id = supermercado_id;
+    public void setSupermercado(Supermercado supermercado) {
+        this.supermercado = supermercado;
     }
 
     public String getMensaje() {
@@ -78,7 +80,7 @@ public class Comentario {
 
     @Override
     public String toString() {
-        return "Comentario{" + "id=" + id_comentarios + ", usuarioId=" + usuarioId + ", supermercado_id=" + supermercado_id + ", mensaje=" + mensaje + '}';
+        return "Comentario{" + "id=" + id_comentarios + ", usuarioId=" + usuarioId + ", supermercado=" + supermercado + ", mensaje=" + mensaje + '}';
     }
     
     

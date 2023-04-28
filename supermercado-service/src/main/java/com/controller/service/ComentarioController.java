@@ -29,13 +29,13 @@ public class ComentarioController {
     @PostMapping
     public ResponseEntity<Comentario> agregarComentario(@RequestBody Comentario comentario) {
 
-        Supermercado supermercadoOptional = supermercadoServicio.obtenerSupermercadoPorId(comentario.getSupermercadoId());
+        Supermercado supermercadoOptional = supermercadoServicio.obtenerSupermercadoPorId(comentario.getSupermercado().getId());
 
         if (supermercadoOptional == null) {
             return ResponseEntity.unprocessableEntity().build();
         }
 
-        comentario.setSupermercadoId(supermercadoOptional.getId());
+        comentario.setSupermercado(supermercadoOptional);
 
         Comentario comentarioGuardado = comentarioService.guardarComentario(comentario);
 
@@ -45,7 +45,7 @@ public class ComentarioController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Comentario> actualizarComentario(@PathVariable Long id, @RequestBody Comentario comentario) {
-        Supermercado supermercadoOptional = supermercadoServicio.obtenerSupermercadoPorId(comentario.getSupermercadoId());
+        Supermercado supermercadoOptional = supermercadoServicio.obtenerSupermercadoPorId(comentario.getSupermercado().getId());
 
         if (supermercadoOptional == null) {
             return ResponseEntity.unprocessableEntity().build();
@@ -58,7 +58,7 @@ public class ComentarioController {
         }
 
         comentario.setId(comentarioGuardado.getId());
-        comentario.setSupermercadoId(supermercadoOptional.getId());
+        comentario.setSupermercado(supermercadoOptional);
         comentarioService.guardarComentario(comentario);
 
         return ResponseEntity.ok(comentario);

@@ -1,5 +1,6 @@
 package com.supermercadoservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name= "supermercados")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Supermercado {
     
     @Id
