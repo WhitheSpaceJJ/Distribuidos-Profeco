@@ -24,3 +24,8 @@ spring:
           uri: lb://supermercado-service
           predicates:
             - Path=/supermercado/**
+            
+        - id: consumidor-service
+          uri: lb://consumidor-service
+          predicates:
+            - Path=/consumidor/**

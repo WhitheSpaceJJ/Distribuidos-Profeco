@@ -1,12 +1,8 @@
 package com.controller.service;
 
-import com.supermercado.service.servicio.IComentarioServicio;
-import com.supermercado.service.servicio.IProductoServicio;
 import com.supermercado.service.servicio.ISupermercadoServicio;
-import com.supermercadoservice.model.Producto;
 import com.supermercadoservice.model.Supermercado;
 import java.util.List;
-import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
