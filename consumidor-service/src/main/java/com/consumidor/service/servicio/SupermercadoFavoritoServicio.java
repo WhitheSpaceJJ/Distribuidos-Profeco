@@ -1,21 +1,16 @@
 package com.consumidor.service.servicio;
 
-import com.consumidorservice.model.Supermercado;
 import com.consumidorservice.model.SupermercadoFavorito;
 import com.consumidorservice.repository.ISupermercadoFavoritoRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 public class SupermercadoFavoritoServicio implements ISupermercadoFavoritoServicio {
 
     @Autowired
     private ISupermercadoFavoritoRepository repositorio;
-
-    
 
     @Override
     public List<SupermercadoFavorito> listarTodosLosSupermercadosFavoritos() {

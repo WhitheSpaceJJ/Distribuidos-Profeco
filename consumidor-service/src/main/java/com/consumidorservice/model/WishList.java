@@ -24,11 +24,11 @@ public class WishList {
 
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "supermercado_id")
+    @JoinColumn(name = "consumidor_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Consumidor consumidor_id;
 
-    @Column(name = "supermercado_id", insertable=false, updatable=false)
+    @Column(name = "supermercado_id")
     private Long supermercado_id;
 
     public WishList() {

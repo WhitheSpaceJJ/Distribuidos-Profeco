@@ -4,7 +4,6 @@
  */
 package com.consumidor.service.servicio;
 
-import com.consumidorservice.model.Supermercado;
 import com.consumidorservice.model.SupermercadoFavorito;
 import java.util.List;
 
