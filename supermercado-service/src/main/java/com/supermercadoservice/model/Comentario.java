@@ -24,7 +24,7 @@ public class Comentario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_comentarios;
-    private Long usuarioId;
+    private Long consumidorId;
     
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -41,7 +41,7 @@ public class Comentario {
     
     public Comentario(Long id, Long usuarioId, Supermercado supermercado, String mensaje) {
         this.id_comentarios = id;
-        this.usuarioId = usuarioId;
+        this.consumidorId = usuarioId;
         this.supermercado = supermercado;
         this.mensaje = mensaje;
     }
@@ -54,12 +54,12 @@ public class Comentario {
         this.id_comentarios = id;
     }
 
-    public Long getUsuarioId() {
-        return usuarioId;
+    public Long getConsumidorId() {
+        return consumidorId;
     }
 
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setConsumidorId(Long consumidorId) {
+        this.consumidorId = consumidorId;
     }
 
     public Supermercado getSupermercado() {
@@ -80,7 +80,7 @@ public class Comentario {
 
     @Override
     public String toString() {
-        return "Comentario{" + "id=" + id_comentarios + ", usuarioId=" + usuarioId + ", supermercado=" + supermercado + ", mensaje=" + mensaje + '}';
+        return "Comentario{" + "id=" + id_comentarios + ", consumidorId=" + consumidorId + ", supermercado=" + supermercado + ", mensaje=" + mensaje + '}';
     }
     
     

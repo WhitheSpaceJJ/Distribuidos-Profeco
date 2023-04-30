@@ -20,4 +20,5 @@ public interface ISupermercadoFavoritoServicio {
 
     public void eliminarSupermercadoFavorito(Long id);
     
+    
 }

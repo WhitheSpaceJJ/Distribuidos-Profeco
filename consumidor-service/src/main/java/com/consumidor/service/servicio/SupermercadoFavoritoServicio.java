@@ -11,7 +11,7 @@ public class SupermercadoFavoritoServicio implements ISupermercadoFavoritoServic
 
     @Autowired
     private ISupermercadoFavoritoRepository repositorio;
-
+    
     @Override
     public List<SupermercadoFavorito> listarTodosLosSupermercadosFavoritos() {
         return (List<SupermercadoFavorito>) repositorio.findAll();

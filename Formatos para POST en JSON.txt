@@ -1,0 +1,58 @@
+Aquí encontrarás ejemplos sobre como deberás hacer las solicitudes POST para cada tabla en las bd
+--------------------------------------------------------------
+bd_supermercados:
+Tabla comentarios:
+http://localhost:8060/supermercado/comentario
+{
+    "consumidorId": 2,
+    "mensaje": "maso productos",
+    "supermercado":{
+        "id":3 (Debe existir, sino error)
+    }
+}
+
+Tabla productos:
+http://localhost:8060/supermercado/producto
+{
+    "nombre":"Barritas Marinela",
+    "marca":"Marinela",
+    "precio":15.50,
+    "stock":25,
+    "supermercado":{
+        "id":5 (Debe existir, sino error)
+    }
+}
+
+Tabla supermercados:
+http://localhost:8060/supermercado
+{
+    "nombre":"tiendita esquina",
+    "direccion":"posada lunar #2131"
+}
+--------------------------------------------------------------
+--------------------------------------------------------------
+bd_consumidores
+Tabla consumidores:
+http://localhost:8060/consumidor
+{
+    "nombre":"Joselin",
+    "contraseña":"js123",
+    "email":"jos@example.com",
+    "edad":18
+}
+
+Tabla supermercadosfavoritos:
+http://localhost:8060/consumidor/spfavorito
+{
+    "supermercado_id":3, (Debe existir, sino error)
+    "consumidor_id":3 (Debe existir, sino error)
+}
+
+Tabla wishlist:
+http://localhost:8060/consumidor/wishlist
+{
+    "deseo":"Me gustaría que pusieran comida para perros",
+    "supermercado_id":5, (Debe existir, sino error)
+    "consumidor_id":2 (Debe existir, sino error)
+}
+--------------------------------------------------------------

@@ -11,7 +11,7 @@ public class WishListServicio implements IWishListServicio {
 
     @Autowired
     private IWishListRepository repositorio;
-
+    
     @Override
     public List<WishList> listarTodasLasWishList() {
         return repositorio.findAll();

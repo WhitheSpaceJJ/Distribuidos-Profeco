@@ -1,5 +1,6 @@
 package com.controller.service;
 
+import com.consumidor.service.servicio.IServicioIntegracion;
 import com.consumidor.service.servicio.ISupermercadoFavoritoServicio;
 import com.consumidorservice.model.SupermercadoFavorito;
 import java.util.List;
@@ -21,16 +22,30 @@ public class SupermercadoFavoritoController {
     @Autowired
     private ISupermercadoFavoritoServicio spFavoritoServicio;
 
+    @Autowired
+    private IServicioIntegracion servicioIntegracion;
+
     @GetMapping
     public ResponseEntity<List<SupermercadoFavorito>> listarSupermercadosFavoritos() {
         return ResponseEntity.ok(spFavoritoServicio.listarTodosLosSupermercadosFavoritos());
     }
 
+    /**
+     * Agrega un supermercado favorito
+     *
+     * @param spFavorito Supermercado favorito a agregar.
+     * @return El supermercado favorito a guardar.
+     */
     @PostMapping
     public ResponseEntity<SupermercadoFavorito> agregarSupermercadoFavorito(@RequestBody SupermercadoFavorito spFavorito) {
-
-        return ResponseEntity.ok(spFavoritoServicio.guardarSupermercadoFavorito(spFavorito));
-
+        try {
+            if (servicioIntegracion.supermercadoExists(spFavorito.getSupermercado_id())) {
+                return ResponseEntity.ok(spFavoritoServicio.guardarSupermercadoFavorito(spFavorito));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
+        return ResponseEntity.unprocessableEntity().build();
     }
 
     @PutMapping("/{id}")

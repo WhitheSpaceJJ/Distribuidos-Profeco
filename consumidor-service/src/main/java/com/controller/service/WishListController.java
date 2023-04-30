@@ -1,5 +1,6 @@
 package com.controller.service;
 
+import com.consumidor.service.servicio.IServicioIntegracion;
 import com.consumidor.service.servicio.IWishListServicio;
 import com.consumidorservice.model.WishList;
 import java.util.List;
@@ -21,6 +22,10 @@ public class WishListController {
     @Autowired
     private IWishListServicio wishListServicio;
 
+    // Servicio de integración de microservicios
+    @Autowired
+    private IServicioIntegracion servicioIntegracion;
+
     @GetMapping
     public ResponseEntity<List<WishList>> listarWishList() {
         return ResponseEntity.ok(wishListServicio.listarTodasLasWishList());
@@ -28,7 +33,14 @@ public class WishListController {
 
     @PostMapping
     public ResponseEntity<WishList> agregarWishList(@RequestBody WishList wishList) {
-        return ResponseEntity.ok(wishListServicio.guardarWishList(wishList));
+        try {
+            if (servicioIntegracion.supermercadoExists(wishList.getSupermercado_id())) {
+                return ResponseEntity.ok(wishListServicio.guardarWishList(wishList));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
+        return ResponseEntity.unprocessableEntity().build();
     }
 
     @PutMapping("/{id}")

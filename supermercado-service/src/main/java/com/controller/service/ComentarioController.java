@@ -1,6 +1,7 @@
 package com.controller.service;
 
 import com.supermercado.service.servicio.IComentarioServicio;
+import com.supermercado.service.servicio.IServicioIntegracion;
 import com.supermercado.service.servicio.ISupermercadoServicio;
 import com.supermercadoservice.model.Comentario;
 import com.supermercadoservice.model.Supermercado;
@@ -26,8 +27,15 @@ public class ComentarioController {
     @Autowired
     private ISupermercadoServicio supermercadoServicio;
 
+    @Autowired
+    private IServicioIntegracion servicioIntegracion;
+
     @PostMapping
     public ResponseEntity<Comentario> agregarComentario(@RequestBody Comentario comentario) {
+
+        if (!servicioIntegracion.consumidorExists(comentario.getConsumidorId())) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
 
         Supermercado supermercadoOptional = supermercadoServicio.obtenerSupermercadoPorId(comentario.getSupermercado().getId());
 
@@ -38,7 +46,6 @@ public class ComentarioController {
         comentario.setSupermercado(supermercadoOptional);
 
         Comentario comentarioGuardado = comentarioService.guardarComentario(comentario);
-
 
         return ResponseEntity.ok(comentarioGuardado);
     }
