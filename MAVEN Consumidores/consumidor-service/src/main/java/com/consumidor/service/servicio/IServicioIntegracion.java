@@ -4,8 +4,7 @@
  */
 package com.consumidor.service.servicio;
 
-
-import entidades.entidades_supermercados.Supermercados;
+import entidades.oficial.*;
 import java.util.List;
 
 public interface IServicioIntegracion {

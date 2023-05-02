@@ -4,7 +4,8 @@
  */
 package colas.supermercados;
 
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.ConnectionFactory;
 import entidades.oficial.Productos;
@@ -19,10 +20,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-/**
- *
- * @author josej
- */
 public class ProductoCola implements AutoCloseable {
 
     private com.rabbitmq.client.Connection connection;
@@ -44,12 +41,17 @@ public class ProductoCola implements AutoCloseable {
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                              .headers(Collections.singletonMap("clave", "guardar"))
+                .headers(Collections.singletonMap("clave", "guardar"))
                 .build();
-
+        String jsonString2 = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            jsonString2 = mapper.writeValueAsString(message);
+        } catch (Exception e) {
+        }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(message);
+        oos.writeObject(jsonString2);
         byte[] bytes = bos.toByteArray();
 
         channel.basicPublish("", requestQueueName, props, bytes);
@@ -83,12 +85,18 @@ public class ProductoCola implements AutoCloseable {
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                              .headers(Collections.singletonMap("clave", "actualizar"))
+                .headers(Collections.singletonMap("clave", "actualizar"))
                 .build();
 
+        String jsonString2 = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            jsonString2 = mapper.writeValueAsString(message);
+        } catch (Exception e) {
+        }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(message);
+        oos.writeObject(jsonString2);
         byte[] bytes = bos.toByteArray();
 
         channel.basicPublish("", requestQueueName, props, bytes);
@@ -122,7 +130,7 @@ public class ProductoCola implements AutoCloseable {
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                                .headers(Collections.singletonMap("clave", "eliminar"))
+                .headers(Collections.singletonMap("clave", "eliminar"))
                 .build();
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -161,7 +169,7 @@ public class ProductoCola implements AutoCloseable {
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                 .headers(Collections.singletonMap("clave", "obtener"))
+                .headers(Collections.singletonMap("clave", "obtener"))
                 .build();
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -177,18 +185,27 @@ public class ProductoCola implements AutoCloseable {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
-               Productos response2 = null;
+                String response2 = null;
+                Productos objeto = null;
                 try {
-                    response2 = (Productos) ois.readObject();
+                    response2 = (String) ois.readObject();
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("Error; " + ex.getMessage());
                 }
-                response.complete(response2);
+                if (response2 != null) {
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        objeto = mapper.readValue(response2, Productos.class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
+                    }
+                }
+                response.complete(objeto);
             }
         }, consumerTag -> {
         });
 
-      Productos peticion = response.get();
+        Productos peticion = response.get();
         channel.basicCancel(ctag);
         return peticion;
     }
@@ -200,7 +217,7 @@ public class ProductoCola implements AutoCloseable {
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                 .headers(Collections.singletonMap("clave", "listar"))
+                .headers(Collections.singletonMap("clave", "listar"))
                 .build();
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -216,18 +233,27 @@ public class ProductoCola implements AutoCloseable {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
-                Productos[] response2 = null;
+                String response2 = null;
+                Productos[] objeto = null;
                 try {
-                    response2 = (Productos[]) ois.readObject();
+                    response2 = (String) ois.readObject();
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("Error; " + ex.getMessage());
                 }
-                response.complete(response2);
+                if (response2 != null) {
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        objeto = mapper.readValue(response2, Productos[].class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
+                    }
+                }
+                response.complete(objeto);
             }
         }, consumerTag -> {
         });
 
-       Productos[] peticion = response.get();
+        Productos[] peticion = (Productos[]) response.get();
         channel.basicCancel(ctag);
         return peticion;
     }

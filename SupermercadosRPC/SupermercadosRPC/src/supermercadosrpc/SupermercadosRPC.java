@@ -4,6 +4,7 @@
  */
 package supermercadosrpc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -23,7 +24,6 @@ import org.apache.commons.lang3.SerializationUtils;
  */
 public class SupermercadosRPC {
 
-  
     private static final String RPC_QUEUE_NAME = "rpc_queue_supermercados";
 
     public static void main(String[] argv) throws Exception {
@@ -39,23 +39,32 @@ public class SupermercadosRPC {
 
         System.out.println(" [x] Awaiting RPC requests, supermercado");
 
-      
         DeliverCallback deliverCallback = (var consumerTag, var delivery) -> {
             AMQP.BasicProperties replyProps = new AMQP.BasicProperties.Builder()
                     .correlationId(delivery.getProperties().getCorrelationId())
                     .build();
-                 String tag = (String) delivery.getProperties().getHeaders().get("clave").toString();
+            String tag = (String) delivery.getProperties().getHeaders().get("clave").toString();
             ISupermercados consumidorServicio = new SupermercadosServicio();
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(bos);
             switch (tag) {
                 case "guardar":
-                    Supermercados peticion = null;
+                    
+                                 String peticion56 = null;
                     try {
-                        peticion = ( Supermercados) SerializationUtils.deserialize(delivery.getBody());
+                        peticion56 = (String) SerializationUtils.deserialize(delivery.getBody());
                     } catch (RuntimeException e) {
                         System.out.println(" [.] " + e);
                     }
+                 Supermercados  peticion = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        peticion = mapper.readValue(peticion56, Supermercados .class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
+                    }
+                    
+                
                     boolean agregado = false;
                     try {
                         agregado = consumidorServicio.guardarSupermercados(peticion);
@@ -68,12 +77,23 @@ public class SupermercadosRPC {
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                     break;
                 case "actualizar":
-                  Supermercados peticion2 = null;
+                    
+                          String peticion76 = null;
                     try {
-                        peticion2 = ( Supermercados) SerializationUtils.deserialize(delivery.getBody());
+                        peticion76 = (String) SerializationUtils.deserialize(delivery.getBody());
                     } catch (RuntimeException e) {
                         System.out.println(" [.] " + e);
                     }
+                    
+                      Supermercados peticion2 = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        peticion2 = mapper.readValue(peticion76,    Supermercados.class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
+                    }
+                    
+                   
                     boolean actualizado = false;
                     try {
                         actualizado = consumidorServicio.actualizarSupermercados(peticion2);
@@ -108,27 +128,39 @@ public class SupermercadosRPC {
                     } catch (RuntimeException e) {
                         System.out.println(" [.] " + e);
                     }
-                   Supermercados obtener =null;
+                    Supermercados obtener = null;
                     try {
                         obtener = consumidorServicio.obtenerSupermercadosPorId(peticion4);
                     } catch (Exception e) {
                     }
-                    oos.writeObject(obtener);
+                    String jsonString = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        jsonString = mapper.writeValueAsString(obtener);
+                    } catch (Exception e) {
+                    }
+                    oos.writeObject(jsonString);
                     byte[] bytes4 = bos.toByteArray();
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, bytes4);
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                     break;
                 case "listar":
-                     Supermercados[] listar = null;
+                    Supermercados[] listar = null;
                     try {
                         List< Supermercados> lista = consumidorServicio.listarTodosLosSupermercados();
-                        listar = new  Supermercados[lista.size()];
+                        listar = new Supermercados[lista.size()];
                         for (int i = 0; i < listar.length; i++) {
                             listar[i] = lista.get(i);
                         }
                     } catch (Exception e) {
                     }
-                    oos.writeObject(listar);
+                    String jsonString2 = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        jsonString2 = mapper.writeValueAsString(listar);
+                    } catch (Exception e) {
+                    }
+                    oos.writeObject(jsonString2);
                     byte[] bytes5 = bos.toByteArray();
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, bytes5);
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);

@@ -4,6 +4,7 @@
  */
 package colas.supermercados;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.ConnectionFactory;
 import entidades.oficial.*;
@@ -46,9 +47,15 @@ public class ComentarioCola implements AutoCloseable {
                               .headers(Collections.singletonMap("clave", "guardar"))
                 .build();
 
+       String jsonString2 = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            jsonString2 = mapper.writeValueAsString(message);
+        } catch (Exception e) {
+        }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(message);
+        oos.writeObject(jsonString2);
         byte[] bytes = bos.toByteArray();
 
         channel.basicPublish("", requestQueueName, props, bytes);
@@ -84,10 +91,15 @@ public class ComentarioCola implements AutoCloseable {
                 .replyTo(replyQueueName)
                               .headers(Collections.singletonMap("clave", "actualizar"))
                 .build();
-
+    String jsonString2 = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            jsonString2 = mapper.writeValueAsString(message);
+        } catch (Exception e) {
+        }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(message);
+        oos.writeObject(jsonString2);
         byte[] bytes = bos.toByteArray();
 
         channel.basicPublish("", requestQueueName, props, bytes);
@@ -176,13 +188,22 @@ public class ComentarioCola implements AutoCloseable {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
-               Comentarios response2 = null;
+               String response2 = null;
+                Comentarios objeto = null;
                 try {
-                    response2 = (Comentarios) ois.readObject();
+                    response2 = (String) ois.readObject();
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("Error; " + ex.getMessage());
                 }
-                response.complete(response2);
+                if (response2 != null) {
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        objeto = mapper.readValue(response2,     Comentarios.class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
+                    }
+                }
+                response.complete(objeto);
             }
         }, consumerTag -> {
         });
@@ -215,13 +236,22 @@ public class ComentarioCola implements AutoCloseable {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
-                Comentarios[] response2 = null;
+               String response2 = null;
+                Comentarios[] objeto = null;
                 try {
-                    response2 = (Comentarios[]) ois.readObject();
+                    response2 = (String) ois.readObject();
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("Error; " + ex.getMessage());
                 }
-                response.complete(response2);
+                if (response2 != null) {
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        objeto = mapper.readValue(response2,     Comentarios[].class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
+                    }
+                }
+                response.complete(objeto);
             }
         }, consumerTag -> {
         });

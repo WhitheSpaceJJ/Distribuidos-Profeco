@@ -14,8 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableDiscoveryClient
 @EnableAutoConfiguration(exclude = { ErrorMvcAutoConfiguration.class })
 @ComponentScan(basePackages = {"com.controller.service", "com.consumidor.service.servicio", "com.consumidor.service.configuracion"})
-@EntityScan("com.consumidorservice.model")
-@EnableJpaRepositories("com.consumidorservice.repository")
+@EntityScan("entidades.oficial")
 public class ConsumidorServiceApplication {
 
 	public static void main(String[] args) {

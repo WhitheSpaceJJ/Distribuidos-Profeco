@@ -1,7 +1,7 @@
 package com.controller.service;
 
 import colas.consumidor.ConsumidorCola;
-import entidades.entidades_consumidor.Consumidores;
+import entidades.oficial.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

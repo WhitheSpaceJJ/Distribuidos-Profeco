@@ -4,6 +4,7 @@
  */
 package whislitrpc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import superfavoritorpc.*;
 import consumidoresrpc.*;
 import com.rabbitmq.client.AMQP;
@@ -51,12 +52,21 @@ public class WhislListRPC {
             ObjectOutputStream oos = new ObjectOutputStream(bos);
             switch (tag) {
                 case "guardar":
-                    Wishlist peticion = null;
+                    
+                          String peticion56 = null;
                     try {
-                        peticion = (Wishlist) SerializationUtils.deserialize(delivery.getBody());
+                        peticion56 = (String) SerializationUtils.deserialize(delivery.getBody());
                     } catch (RuntimeException e) {
                         System.out.println(" [.] " + e);
                     }
+                    Wishlist peticion = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        peticion = mapper.readValue(peticion56, Wishlist.class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
+                    }
+                    
                     boolean agregado = false;
                     try {
                         agregado = consumidorServicio.guardarWishList(peticion);
@@ -69,12 +79,21 @@ public class WhislListRPC {
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                     break;
                 case "actualizar":
-                    Wishlist peticion2 = null;
+                      String peticion76 = null;
                     try {
-                        peticion2 = (Wishlist) SerializationUtils.deserialize(delivery.getBody());
+                        peticion76 = (String) SerializationUtils.deserialize(delivery.getBody());
                     } catch (RuntimeException e) {
                         System.out.println(" [.] " + e);
                     }
+                    
+                        Wishlist peticion2 = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        peticion2 = mapper.readValue(peticion76,  Wishlist.class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
+                    }
+                  
                     boolean actualizado = false;
                     try {
                         actualizado = consumidorServicio.actualizarWishList(peticion2);
@@ -114,7 +133,13 @@ public class WhislListRPC {
                         obtener = consumidorServicio.obtenerWishListPorId(peticion4);
                     } catch (Exception e) {
                     }
-                    oos.writeObject(obtener);
+                    String jsonString = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        jsonString = mapper.writeValueAsString(obtener);
+                    } catch (Exception e) {
+                    }
+                    oos.writeObject(jsonString);
                     byte[] bytes4 = bos.toByteArray();
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, bytes4);
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
@@ -129,7 +154,13 @@ public class WhislListRPC {
                         }
                     } catch (Exception e) {
                     }
-                    oos.writeObject(listar);
+                String jsonString2 = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        jsonString2 = mapper.writeValueAsString(listar);
+                    } catch (Exception e) {
+                    }
+                    oos.writeObject(jsonString2);
                     byte[] bytes5 = bos.toByteArray();
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, bytes5);
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);

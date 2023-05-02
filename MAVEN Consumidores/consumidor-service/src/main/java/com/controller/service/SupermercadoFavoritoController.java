@@ -2,7 +2,7 @@ package com.controller.service;
 
 import colas.consumidor.SuperMercadoFavoritoCola;
 import com.consumidor.service.servicio.IServicioIntegracion;
-import entidades.entidades_consumidor.Supermercadosfavoritos;
+import entidades.oficial.*;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;

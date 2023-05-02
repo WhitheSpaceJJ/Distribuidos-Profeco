@@ -4,6 +4,7 @@
  */
 package superfavoritorpc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import consumidoresrpc.*;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
@@ -39,22 +40,28 @@ public class SuperMercadoRPC {
 
         System.out.println(" [x] Awaiting RPC requests, supermercado");
 
-      
         DeliverCallback deliverCallback = (var consumerTag, var delivery) -> {
             AMQP.BasicProperties replyProps = new AMQP.BasicProperties.Builder()
                     .correlationId(delivery.getProperties().getCorrelationId())
                     .build();
-                 String tag = (String) delivery.getProperties().getHeaders().get("clave").toString();
+            String tag = (String) delivery.getProperties().getHeaders().get("clave").toString();
             ISupermercadoFavoritoServicio consumidorServicio = new SupermercadoFavoritoServicio();
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(bos);
             switch (tag) {
                 case "guardar":
-                    Supermercadosfavoritos peticion = null;
+                    String peticion56 = null;
                     try {
-                        peticion = ( Supermercadosfavoritos) SerializationUtils.deserialize(delivery.getBody());
+                        peticion56 = (String) SerializationUtils.deserialize(delivery.getBody());
                     } catch (RuntimeException e) {
                         System.out.println(" [.] " + e);
+                    }
+                    Supermercadosfavoritos peticion = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        peticion = mapper.readValue(peticion56, Supermercadosfavoritos.class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
                     }
                     boolean agregado = false;
                     try {
@@ -68,11 +75,19 @@ public class SuperMercadoRPC {
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                     break;
                 case "actualizar":
-                  Supermercadosfavoritos peticion2 = null;
+                       String peticion76 = null;
                     try {
-                        peticion2 = ( Supermercadosfavoritos) SerializationUtils.deserialize(delivery.getBody());
+                        peticion76 = (String) SerializationUtils.deserialize(delivery.getBody());
                     } catch (RuntimeException e) {
                         System.out.println(" [.] " + e);
+                    }
+                    
+                        Supermercadosfavoritos peticion2 = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        peticion2 = mapper.readValue(peticion76, Supermercadosfavoritos.class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
                     }
                     boolean actualizado = false;
                     try {
@@ -108,27 +123,39 @@ public class SuperMercadoRPC {
                     } catch (RuntimeException e) {
                         System.out.println(" [.] " + e);
                     }
-                   Supermercadosfavoritos obtener =null;
+                    Supermercadosfavoritos obtener = null;
                     try {
                         obtener = consumidorServicio.obtenerSupermercadoFavoritoPorId(peticion4);
                     } catch (Exception e) {
                     }
-                    oos.writeObject(obtener);
+                    String jsonString = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        jsonString = mapper.writeValueAsString(obtener);
+                    } catch (Exception e) {
+                    }
+                    oos.writeObject(jsonString);
                     byte[] bytes4 = bos.toByteArray();
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, bytes4);
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                     break;
                 case "listar":
-                     Supermercadosfavoritos[] listar = null;
+                    Supermercadosfavoritos[] listar = null;
                     try {
                         List< Supermercadosfavoritos> lista = consumidorServicio.listarTodosLosSupermercadosFavoritos();
-                        listar = new  Supermercadosfavoritos[lista.size()];
+                        listar = new Supermercadosfavoritos[lista.size()];
                         for (int i = 0; i < listar.length; i++) {
                             listar[i] = lista.get(i);
                         }
                     } catch (Exception e) {
                     }
-                    oos.writeObject(listar);
+                    String jsonString2 = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        jsonString2 = mapper.writeValueAsString(listar);
+                    } catch (Exception e) {
+                    }
+                    oos.writeObject(jsonString2);
                     byte[] bytes5 = bos.toByteArray();
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, bytes5);
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
@@ -141,5 +168,5 @@ public class SuperMercadoRPC {
         channel.basicConsume(RPC_QUEUE_NAME, false, deliverCallback, (consumerTag -> {
         }));
     }
-    
+
 }

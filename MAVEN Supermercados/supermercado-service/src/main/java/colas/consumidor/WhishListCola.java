@@ -4,6 +4,7 @@
  */
 package colas.consumidor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.ConnectionFactory;
 import entidades.oficial.*;
@@ -27,6 +28,7 @@ public class WhishListCola implements AutoCloseable {
     private com.rabbitmq.client.Connection connection;
     private com.rabbitmq.client.Channel channel;
     private String requestQueueName = "rpc_queue_whishlist";
+
     public WhishListCola() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
@@ -35,19 +37,25 @@ public class WhishListCola implements AutoCloseable {
         channel = connection.createChannel();
     }
 
-     public boolean guardar(Wishlist message) throws IOException, InterruptedException, ExecutionException {
+    public boolean guardar(Wishlist message) throws IOException, InterruptedException, ExecutionException {
         final String corrId = UUID.randomUUID().toString();
 
         String replyQueueName = channel.queueDeclare().getQueue();
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                  .headers(Collections.singletonMap("clave", "guardar"))
+                .headers(Collections.singletonMap("clave", "guardar"))
                 .build();
 
+        String jsonString2 = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            jsonString2 = mapper.writeValueAsString(message);
+        } catch (Exception e) {
+        }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(message);
+        oos.writeObject(jsonString2);
         byte[] bytes = bos.toByteArray();
 
         channel.basicPublish("", requestQueueName, props, bytes);
@@ -81,12 +89,18 @@ public class WhishListCola implements AutoCloseable {
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                  .headers(Collections.singletonMap("clave", "actualizar"))                
+                .headers(Collections.singletonMap("clave", "actualizar"))
                 .build();
 
+        String jsonString2 = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            jsonString2 = mapper.writeValueAsString(message);
+        } catch (Exception e) {
+        }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(message);
+        oos.writeObject(jsonString2);
         byte[] bytes = bos.toByteArray();
 
         channel.basicPublish("", requestQueueName, props, bytes);
@@ -120,7 +134,7 @@ public class WhishListCola implements AutoCloseable {
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-   .headers(Collections.singletonMap("clave", "eliminar"))                      
+                .headers(Collections.singletonMap("clave", "eliminar"))
                 .build();
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -159,7 +173,7 @@ public class WhishListCola implements AutoCloseable {
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                   .headers(Collections.singletonMap("clave", "obtener"))     
+                .headers(Collections.singletonMap("clave", "obtener"))
                 .build();
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -175,18 +189,27 @@ public class WhishListCola implements AutoCloseable {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
-                Wishlist response2 = null;
+                String response2 = null;
+                Wishlist objeto = null;
                 try {
-                    response2 = (Wishlist) ois.readObject();
+                    response2 = (String) ois.readObject();
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("Error; " + ex.getMessage());
                 }
-                response.complete(response2);
+                if (response2 != null) {
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        objeto = mapper.readValue(response2, Wishlist.class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
+                    }
+                }
+                response.complete(objeto);
             }
         }, consumerTag -> {
         });
 
-   Wishlist peticion = response.get();
+        Wishlist peticion = response.get();
         channel.basicCancel(ctag);
         return peticion;
     }
@@ -198,7 +221,7 @@ public class WhishListCola implements AutoCloseable {
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                .headers(Collections.singletonMap("clave", "listar"))  
+                .headers(Collections.singletonMap("clave", "listar"))
                 .build();
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -214,13 +237,22 @@ public class WhishListCola implements AutoCloseable {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
-               Wishlist[] response2 = null;
+                String response2 = null;
+                Wishlist[] objeto = null;
                 try {
-                    response2 = (Wishlist[]) ois.readObject();
+                    response2 = (String) ois.readObject();
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("Error; " + ex.getMessage());
                 }
-                response.complete(response2);
+                if (response2 != null) {
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        objeto = mapper.readValue(response2, Wishlist[].class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
+                    }
+                }
+                response.complete(objeto);
             }
         }, consumerTag -> {
         });

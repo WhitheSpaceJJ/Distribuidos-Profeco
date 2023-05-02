@@ -4,9 +4,10 @@
  */
 package colas.consumidor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.ConnectionFactory;
-import entidades.entidades_consumidor.Supermercadosfavoritos;
+import entidades.oficial.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -44,10 +45,15 @@ public class SuperMercadoFavoritoCola implements AutoCloseable {
                 .replyTo(replyQueueName)
                 .headers(Collections.singletonMap("clave", "guardar"))
                 .build();
-
+   String jsonString2 = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            jsonString2 = mapper.writeValueAsString(message);
+        } catch (Exception e) {
+        }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(message);
+        oos.writeObject(jsonString2);
         byte[] bytes = bos.toByteArray();
 
         channel.basicPublish("", requestQueueName, props, bytes);
@@ -84,9 +90,15 @@ public class SuperMercadoFavoritoCola implements AutoCloseable {
                 .headers(Collections.singletonMap("clave", "actualizar"))
                 .build();
 
+   String jsonString2 = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            jsonString2 = mapper.writeValueAsString(message);
+        } catch (Exception e) {
+        }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(message);
+        oos.writeObject(jsonString2);
         byte[] bytes = bos.toByteArray();
 
         channel.basicPublish("", requestQueueName, props, bytes);
@@ -175,13 +187,22 @@ public class SuperMercadoFavoritoCola implements AutoCloseable {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
-                Supermercadosfavoritos response2 = null;
+            String response2 = null;
+               Supermercadosfavoritos objeto = null;
                 try {
-                    response2 = (Supermercadosfavoritos) ois.readObject();
+                    response2 = (String) ois.readObject();
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("Error; " + ex.getMessage());
                 }
-                response.complete(response2);
+                if (response2 != null) {
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        objeto = mapper.readValue(response2,      Supermercadosfavoritos.class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
+                    }
+                }
+                response.complete(objeto);
             }
         }, consumerTag -> {
         });
@@ -214,13 +235,22 @@ public class SuperMercadoFavoritoCola implements AutoCloseable {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
-                Supermercadosfavoritos[] response2 = null;
+                 String response2 = null;
+               Supermercadosfavoritos[] objeto = null;
                 try {
-                    response2 = (Supermercadosfavoritos[]) ois.readObject();
+                    response2 = (String) ois.readObject();
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("Error; " + ex.getMessage());
                 }
-                response.complete(response2);
+                if (response2 != null) {
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        objeto = mapper.readValue(response2,      Supermercadosfavoritos[].class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
+                    }
+                }
+                response.complete(objeto);
             }
         }, consumerTag -> {
         });

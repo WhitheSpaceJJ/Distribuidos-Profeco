@@ -4,6 +4,7 @@
  */
 package consumidoresrpc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -55,15 +56,22 @@ public class ConsumidoresRPC {
             ObjectOutputStream oos = new ObjectOutputStream(bos);
             switch (tag) {
                 case "guardar":
-                    Consumidores peticion = null;
+                    String peticion = null;
                     try {
-                        peticion = (Consumidores) SerializationUtils.deserialize(delivery.getBody());
+                        peticion = (String) SerializationUtils.deserialize(delivery.getBody());
                     } catch (RuntimeException e) {
                         System.out.println(" [.] " + e);
                     }
+                    Consumidores peticion2 = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        peticion2 = mapper.readValue(peticion, Consumidores.class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
+                    }
                     boolean agregado = false;
                     try {
-                        agregado = consumidorServicio.guardarConsumidor(peticion);
+                        agregado = consumidorServicio.guardarConsumidor(peticion2);
                     } catch (Exception e) {
                     }
 
@@ -73,15 +81,22 @@ public class ConsumidoresRPC {
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                     break;
                 case "actualizar":
-                    Consumidores peticion2 = null;
+                        String peticion4 = null;
                     try {
-                        peticion2 = (Consumidores) SerializationUtils.deserialize(delivery.getBody());
+                        peticion4 = (String) SerializationUtils.deserialize(delivery.getBody());
                     } catch (RuntimeException e) {
                         System.out.println(" [.] " + e);
                     }
+                    Consumidores peticion22 = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        peticion22 = mapper.readValue(peticion4, Consumidores.class);
+                    } catch (Exception e) {
+                        System.out.println("Error; " + e.getMessage());
+                    }
                     boolean actualizado = false;
                     try {
-                        actualizado = consumidorServicio.actualizarConsumidor(peticion2);
+                        actualizado = consumidorServicio.actualizarConsumidor(peticion22);
                     } catch (Exception e) {
                     }
                     oos.writeObject(actualizado);
@@ -107,18 +122,24 @@ public class ConsumidoresRPC {
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                     break;
                 case "obtener":
-                    int peticion4 = -1;
+                    int peticion45 = -1;
                     try {
-                        peticion4 = (int) SerializationUtils.deserialize(delivery.getBody());
+                        peticion45 = (int) SerializationUtils.deserialize(delivery.getBody());
                     } catch (RuntimeException e) {
                         System.out.println(" [.] " + e);
                     }
                     Consumidores obtener = null;
                     try {
-                        obtener = consumidorServicio.obtenerConsumidorPorId(peticion4);
+                        obtener = consumidorServicio.obtenerConsumidorPorId(peticion45);
                     } catch (Exception e) {
                     }
-                    oos.writeObject(obtener);
+                    String jsonString = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        jsonString = mapper.writeValueAsString(obtener);
+                    } catch (Exception e) {
+                    }
+                    oos.writeObject(jsonString);
                     byte[] bytes4 = bos.toByteArray();
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, bytes4);
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
@@ -133,7 +154,13 @@ public class ConsumidoresRPC {
                         }
                     } catch (Exception e) {
                     }
-                    oos.writeObject(listar);
+                    String jsonString2 = null;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        jsonString2 = mapper.writeValueAsString(listar);
+                    } catch (Exception e) {
+                    }
+                    oos.writeObject(jsonString2);
                     byte[] bytes5 = bos.toByteArray();
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, bytes5);
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
