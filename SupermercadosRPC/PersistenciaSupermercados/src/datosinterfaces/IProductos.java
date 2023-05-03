@@ -1,6 +1,5 @@
 package datosinterfaces;
 
-import entidades_consumidor.Wishlist;
 import entidades_supermercados.Productos;
 import java.util.List;
 

@@ -4,7 +4,6 @@
  */
 package datosinterfaces;
 
-import entidades_consumidor.Supermercadosfavoritos;
 import entidades_supermercados.Supermercados;
 import java.util.List;
 

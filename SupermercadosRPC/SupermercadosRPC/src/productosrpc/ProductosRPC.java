@@ -4,14 +4,16 @@
  */
 package productosrpc;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
+import com.rabbitmq.client.Delivery;
 import datos.ProductosServicio;
 import datosinterfaces.IProductos;
 import entidades_supermercados.Productos;
@@ -42,7 +44,7 @@ public class ProductosRPC {
 
         System.out.println(" [x] Awaiting RPC requests, supermercado");
 
-        DeliverCallback deliverCallback = (var consumerTag, var delivery) -> {
+        DeliverCallback deliverCallback = (String consumerTag, Delivery delivery) -> {
             AMQP.BasicProperties replyProps = new AMQP.BasicProperties.Builder()
                     .correlationId(delivery.getProperties().getCorrelationId())
                     .build();
@@ -52,22 +54,21 @@ public class ProductosRPC {
             ObjectOutputStream oos = new ObjectOutputStream(bos);
             switch (tag) {
                 case "guardar":
-                    
-                             String peticion56 = null;
+
+                    String peticion56 = null;
                     try {
                         peticion56 = (String) SerializationUtils.deserialize(delivery.getBody());
                     } catch (RuntimeException e) {
                         System.out.println(" [.] " + e);
                     }
-                 Productos peticion = null;
+                    Productos peticion = null;
                     try {
                         ObjectMapper mapper = new ObjectMapper();
                         peticion = mapper.readValue(peticion56, Productos.class);
                     } catch (Exception e) {
                         System.out.println("Error; " + e.getMessage());
                     }
-                    
-                 
+
                     boolean agregado = false;
                     try {
                         agregado = consumidorServicio.guardarProductos(peticion);
@@ -80,23 +81,21 @@ public class ProductosRPC {
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                     break;
                 case "actualizar":
-                          String peticion76 = null;
+                    String peticion76 = null;
                     try {
                         peticion76 = (String) SerializationUtils.deserialize(delivery.getBody());
                     } catch (RuntimeException e) {
                         System.out.println(" [.] " + e);
                     }
-                    
-                       Productos peticion2 = null;
+
+                    Productos peticion2 = null;
                     try {
                         ObjectMapper mapper = new ObjectMapper();
-                        peticion2 = mapper.readValue(peticion76,    Productos.class);
+                        peticion2 = mapper.readValue(peticion76, Productos.class);
                     } catch (Exception e) {
                         System.out.println("Error; " + e.getMessage());
                     }
-               
-                    
-                    
+
                     boolean actualizado = false;
                     try {
                         actualizado = consumidorServicio.actualizarProductos(peticion2);
@@ -153,6 +152,8 @@ public class ProductosRPC {
                         List< Productos> lista = consumidorServicio.listarTodasLasProductos();
                         listar = new Productos[lista.size()];
                         for (int i = 0; i < listar.length; i++) {
+                            lista.get(i).getSupermercadoId().setProductosList(null);
+                            lista.get(i).getSupermercadoId().setComentariosList(null);
                             listar[i] = lista.get(i);
                         }
                     } catch (Exception e) {
@@ -161,13 +162,15 @@ public class ProductosRPC {
                     try {
                         ObjectMapper mapper = new ObjectMapper();
                         jsonString2 = mapper.writeValueAsString(listar);
-                    } catch (Exception e) {
+                    } catch (JsonProcessingException e) {
+                        System.out.println("Exception " + e);
                     }
                     oos.writeObject(jsonString2);
                     byte[] bytes5 = bos.toByteArray();
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, bytes5);
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                     break;
+
                 default:
                     System.out.println("Tag no reconocida: " + tag);
             }

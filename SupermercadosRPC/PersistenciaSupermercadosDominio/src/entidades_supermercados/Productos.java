@@ -4,9 +4,8 @@
  */
 package entidades_supermercados;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 
 /**
@@ -46,6 +44,7 @@ public class Productos implements Serializable {
     private int stock;
     @JoinColumn(name = "supermercado_id", referencedColumnName = "id_supermercados", nullable = false)
     @ManyToOne(optional = false)
+    @JsonBackReference
     private Supermercados supermercadoId;
 
     public Productos() {
@@ -136,14 +135,6 @@ public class Productos implements Serializable {
         return "entidades_supermercados.Productos[ idProductos=" + idProductos + " ]";
     }
 
-    public JsonObjectBuilder toJsonWithOutNull() {
-        JsonObjectBuilder objectBuilder = Json.createObjectBuilder()
-                .add("idProductos", this.idProductos)
-                .add("nombre", this.nombre)
-                .add("marca", this.marca)
-                .add("precio", this.precio)
-                .add("stock", this.stock);
-        return objectBuilder;
-    }
+    
 
 }

@@ -4,21 +4,14 @@
  */
 package colas.supermercados;
 
-import entidades.oficial.Productos;
-import entidades.oficial.Supermercados;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-
 /**
  *
  * @author josej
  */
-
 public class PruebaColas {
 
     /**
@@ -28,10 +21,10 @@ public class PruebaColas {
         // TODO code application logic here
         try {
             ProductoCola productoCola = new ProductoCola();
-            System.out.println("Eliminado; "+Arrays.toString(productoCola.listar()));
+            System.out.println("Eliminado; " + Arrays.toString(productoCola.listar()));
         } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
             System.out.println("Error; " + e.getMessage());
         }
     }
-    
+
 }

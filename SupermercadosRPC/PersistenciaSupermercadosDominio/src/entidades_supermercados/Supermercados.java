@@ -4,11 +4,9 @@
  */
 package entidades_supermercados;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.List;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,7 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -41,8 +38,10 @@ public class Supermercados implements Serializable {
     @Column(name = "direccion", nullable = false, length = 500)
     private String direccion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "supermercadoId")
+    @JsonManagedReference
     private List<Comentarios> comentariosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "supermercadoId")
+    @JsonManagedReference
     private List<Productos> productosList;
 
     public Supermercados() {
@@ -121,13 +120,6 @@ public class Supermercados implements Serializable {
     @Override
     public String toString() {
         return "entidades_supermercados.Supermercados[ idSupermercados=" + idSupermercados + " ]";
-    }
-      public JsonObjectBuilder toJsonWithOutNull() {
-        JsonObjectBuilder builder = Json.createObjectBuilder();
-        builder.add("idSupermercados", this.idSupermercados)
-               .add("nombre", this.nombre)
-               .add("direccion", this.direccion);
-        return builder;
     }
 
 }

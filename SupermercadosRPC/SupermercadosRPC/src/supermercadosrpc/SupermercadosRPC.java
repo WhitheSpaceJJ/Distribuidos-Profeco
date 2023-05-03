@@ -145,20 +145,19 @@ public class SupermercadosRPC {
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                     break;
                 case "listar":
-                    Supermercados[] listar = null;
+                    List< Supermercados> lista = null;
                     try {
-                        List< Supermercados> lista = consumidorServicio.listarTodosLosSupermercados();
-                        listar = new Supermercados[lista.size()];
-                        for (int i = 0; i < listar.length; i++) {
-                            listar[i] = lista.get(i);
-                        }
+                        lista = consumidorServicio.listarTodosLosSupermercados();
+                        
                     } catch (Exception e) {
+                        System.out.println("Exception: "+e);
                     }
                     String jsonString2 = null;
                     try {
                         ObjectMapper mapper = new ObjectMapper();
-                        jsonString2 = mapper.writeValueAsString(listar);
+                        jsonString2 = mapper.writeValueAsString(lista);
                     } catch (Exception e) {
+                        System.out.println("Exception: "+e);
                     }
                     oos.writeObject(jsonString2);
                     byte[] bytes5 = bos.toByteArray();

@@ -2,7 +2,6 @@ package datos;
 
 import conexion.ConexionBD;
 import datosinterfaces.IConexionBD;
-import entidades_consumidor.Supermercadosfavoritos;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

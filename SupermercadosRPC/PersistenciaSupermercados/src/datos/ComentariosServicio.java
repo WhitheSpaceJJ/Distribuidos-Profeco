@@ -3,7 +3,6 @@ package datos;
 import conexion.ConexionBD;
 import datosinterfaces.IComentarios;
 import datosinterfaces.IConexionBD;
-import entidades_consumidor.Consumidores;
 import entidades_supermercados.Comentarios;
 import java.util.List;
 import javax.persistence.EntityManager;

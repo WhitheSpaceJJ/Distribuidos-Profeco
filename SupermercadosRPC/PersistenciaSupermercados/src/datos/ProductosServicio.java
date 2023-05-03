@@ -3,9 +3,8 @@ package datos;
 import conexion.ConexionBD;
 import datosinterfaces.IConexionBD;
 import datosinterfaces.IProductos;
-
-import entidades_consumidor.Wishlist;
 import entidades_supermercados.Productos;
+
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -13,14 +12,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-
 public class ProductosServicio implements IProductos {
 
-
-  
-
-
-     private final IConexionBD conexion;
+    private final IConexionBD conexion;
 
     public ProductosServicio() {
         IConexionBD conexion2 = new ConexionBD();
@@ -29,22 +23,22 @@ public class ProductosServicio implements IProductos {
 
     @Override
     public List<Productos> listarTodasLasProductos() {
-         try {
-        EntityManager em = this.conexion.crearConexion();
-        CriteriaBuilder builder = em.getCriteriaBuilder();
-        CriteriaQuery<Productos> criteria = builder.createQuery(Productos.class);
-        Root<Productos> root = criteria.from(Productos.class);
-        criteria.select(root);
-        TypedQuery<Productos> query = em.createQuery(criteria);
-        return query.getResultList();
-    } catch (IllegalStateException ise) {
-        System.err.println("No se pudieron consultar los Productos");
-        return null;
-    }
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            CriteriaBuilder builder = em.getCriteriaBuilder();
+            CriteriaQuery<Productos> criteria = builder.createQuery(Productos.class);
+            Root<Productos> root = criteria.from(Productos.class);
+            criteria.select(root);
+            TypedQuery<Productos> query = em.createQuery(criteria);
+            return query.getResultList();
+        } catch (IllegalStateException ise) {
+            System.err.println("No se pudieron consultar los Productos");
+            return null;
+        }
     }
 
     @Override
-    public boolean guardarProductos(Productos wishlist)  {
+    public boolean guardarProductos(Productos wishlist) {
         try {
             EntityManager em = this.conexion.crearConexion();
             em.getTransaction().begin();
@@ -62,7 +56,7 @@ public class ProductosServicio implements IProductos {
         try {
             EntityManager em = this.conexion.crearConexion();
             em.getTransaction().begin();
-     Productos productoBD = em.find(Productos.class, id);
+            Productos productoBD = em.find(Productos.class, id);
             em.getTransaction().commit();
             return productoBD;
         } catch (IllegalStateException ise) {
@@ -91,7 +85,7 @@ public class ProductosServicio implements IProductos {
             EntityManager em = this.conexion.crearConexion();
 
             em.getTransaction().begin();
-                     Productos productoBD = null;
+            Productos productoBD = null;
             productoBD = em.find(Productos.class, id);
             em.remove(productoBD);
             em.getTransaction().commit();
@@ -101,6 +95,5 @@ public class ProductosServicio implements IProductos {
             return false;
         }
     }
-
 
 }

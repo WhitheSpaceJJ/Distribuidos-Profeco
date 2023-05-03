@@ -4,8 +4,11 @@
  */
 package datos;
 
+import datosinterfaces.IProductos;
 import datosinterfaces.ISupermercados;
+import entidades_supermercados.Productos;
 import entidades_supermercados.Supermercados;
+import java.util.Arrays;
 
 /**
  *
@@ -18,12 +21,16 @@ public class NewMain {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        ISupermercados supermercados=new SupermercadosServicio();
-        Supermercados s=new Supermercados();
-        s.setDireccion("2");
-        s.setNombre("2");
-        System.out.println("Agregado"+supermercados.guardarSupermercados(s));
-        System.out.println("Super; "+supermercados.listarTodosLosSupermercados());
+
+        IProductos productosServer = new ProductosServicio();
+
+        try {
+            
+            System.out.println(productosServer.listarTodasLasProductos());
+        } catch (Exception e) {
+            System.out.println("Exception: " + e);
+        }
+
     }
-    
+
 }

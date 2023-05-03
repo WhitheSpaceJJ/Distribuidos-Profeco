@@ -5,7 +5,6 @@
 package colas.supermercados;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.ConnectionFactory;
 import entidades.oficial.Productos;
