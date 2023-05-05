@@ -1,0 +1,22 @@
+server:
+  port: ${PORT:${SERVER_PORT:0}}
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    instance:
+      instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+      lease-renewal-interval-in-seconds: 10
+      lease-expiration-duration-in-seconds: 30
+      lease-renewal-after-eviction: 2
+  server:
+    renewalPercentThreshold: 0.85
+    enableSelfPreservation: false
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

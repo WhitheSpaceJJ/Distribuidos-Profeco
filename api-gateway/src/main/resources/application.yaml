@@ -29,3 +29,9 @@ spring:
           uri: lb://consumidor-service
           predicates:
             - Path=/consumidor/**
+            
+        - id: profeco-service
+          uri: lb://profeco-service
+          predicates:
+            - Path=/profeco/**
+           

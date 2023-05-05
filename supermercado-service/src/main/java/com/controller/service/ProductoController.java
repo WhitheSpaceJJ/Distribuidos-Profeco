@@ -30,8 +30,8 @@ public class ProductoController {
         Supermercados supermercadoOptional = null;
 
         try {
-            SuperMercadoCola consumidorCola = new SuperMercadoCola();
-            supermercadoOptional = consumidorCola.obtenerID(producto.getSupermercadoId().getIdSupermercados());
+            SuperMercadoCola supermercadoCola = new SuperMercadoCola();
+            supermercadoOptional = supermercadoCola.obtenerID(producto.getSupermercadoId().getIdSupermercados());
         } catch (Exception e) {
             return ResponseEntity.unprocessableEntity().build();
         }
