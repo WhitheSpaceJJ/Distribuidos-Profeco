@@ -10,4 +10,4 @@ Es probable que al correr un microservicio, este
 tarde en ser reconocido por la API Gateway y dar error
 500, es normal, solo es cuestión de esperar 1-2 minutos
 
-Para cuando necesites hacer peticiones POST, leer el archivo txt "Formatos para POST en JSON archivo informativo". 
+Para cuando necesites hacer peticiones POST, leer el archivo txt "Formatos para POST en JSON".
