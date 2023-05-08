@@ -4,6 +4,7 @@
  */
 package entidades.oficial;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -43,9 +44,12 @@ public class Consumidores implements Serializable {
     @Column(name = "edad", nullable = false)
     private int edad;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "consumidorId")
+        @JsonManagedReference
     private List<Wishlist> wishlistList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "consumidorId")
+        @JsonManagedReference
     private List<Supermercadosfavoritos> supermercadosfavoritosList;
+
 
     public Consumidores() {
     }

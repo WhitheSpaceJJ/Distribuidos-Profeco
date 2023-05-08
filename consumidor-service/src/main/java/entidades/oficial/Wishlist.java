@@ -4,6 +4,7 @@
  */
 package entidades.oficial;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -37,6 +38,7 @@ public class Wishlist implements Serializable {
     private int supermercadoId;
     @JoinColumn(name = "consumidor_id", referencedColumnName = "id_consumidores", nullable = false)
     @ManyToOne(optional = false)
+        @JsonBackReference
     private Consumidores consumidorId;
   
     public Wishlist() {

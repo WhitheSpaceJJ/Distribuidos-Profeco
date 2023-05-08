@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package entidades_supermercados;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -17,10 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-/**
- *
- * @author josej
- */
+
 @Entity
 @Table(name = "supermercados")
 public class Supermercados implements Serializable {

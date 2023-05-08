@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package entidades_supermercados;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -16,10 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-/**
- *
- * @author josej
- */
 @Entity
 @Table(name = "comentarios")
 public class Comentarios implements Serializable {

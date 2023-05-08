@@ -1,9 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package entidades.oficial;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -16,10 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-/**
- *
- * @author josej
- */
+
 @Entity
 @Table(name = "supermercados")
 public class Supermercados implements Serializable {
@@ -37,8 +32,10 @@ public class Supermercados implements Serializable {
     @Column(name = "direccion", nullable = false, length = 500)
     private String direccion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "supermercadoId")
+    @JsonManagedReference
     private List<Comentarios> comentariosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "supermercadoId")
+    @JsonManagedReference
     private List<Productos> productosList;
 
     public Supermercados() {
@@ -118,6 +115,5 @@ public class Supermercados implements Serializable {
     public String toString() {
         return "entidades_supermercados.Supermercados[ idSupermercados=" + idSupermercados + " ]";
     }
-      
 
 }
