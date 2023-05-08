@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,23 +31,23 @@ public class ProductoController {
         try {
             SuperMercadoCola supermercadoCola = new SuperMercadoCola();
             supermercadoOptional = supermercadoCola.obtenerID(producto.getSupermercadoId().getIdSupermercados());
-        } catch (Exception e) {
+        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
             return ResponseEntity.unprocessableEntity().build();
         }
         if (supermercadoOptional == null) {
             return ResponseEntity.unprocessableEntity().build();
         }
-
+        
         try {
-            ProductoCola consumidorCola = new ProductoCola();
-            boolean agregado = consumidorCola.guardar(producto);
+            ProductoCola productoCola = new ProductoCola();
+            producto.setSupermercadoId(supermercadoOptional);
+            boolean agregado = productoCola.guardar(producto);
             if (agregado) {
-                producto.setSupermercadoId(supermercadoOptional);
                 return ResponseEntity.ok(producto);
             } else {
                 return ResponseEntity.unprocessableEntity().build();
             }
-        } catch (Exception e) {
+        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
             return ResponseEntity.unprocessableEntity().build();
         }
     }
@@ -60,13 +59,13 @@ public class ProductoController {
         try {
             SuperMercadoCola consumidorCola = new SuperMercadoCola();
             supermercadoOptional = consumidorCola.obtenerID(id);
-        } catch (Exception e) {
+        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
             return ResponseEntity.unprocessableEntity().build();
         }
         if (supermercadoOptional == null) {
             return ResponseEntity.unprocessableEntity().build();
         }
-
+        
         try {
             ProductoCola consumidorCola = new ProductoCola();
             boolean agregado = consumidorCola.actualizar(producto);

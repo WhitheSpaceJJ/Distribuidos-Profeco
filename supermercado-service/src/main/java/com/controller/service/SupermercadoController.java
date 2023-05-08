@@ -4,9 +4,10 @@ import colas.supermercados.SuperMercadoCola;
 import entidades.oficial.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,18 +29,13 @@ public class SupermercadoController {
             List<Supermercados> lista = new ArrayList<>();
             try {
                 Supermercados[] consumidores = superMercadoCola.listar();
-                for (int i = 0; i < consumidores.length; i++) {
-                    Supermercados consumidore = consumidores[i];
-                    lista.add(consumidore);
-                }
-            } catch (Exception e) {
+                lista.addAll(Arrays.asList(consumidores));
+            } catch (IOException | InterruptedException | ExecutionException e) {
             }
             if (!lista.isEmpty()) {
                 return ResponseEntity.ok(lista);
             }
-        } catch (IOException ex) {
-            return ResponseEntity.unprocessableEntity().build();
-        } catch (TimeoutException ex) {
+        } catch (IOException | TimeoutException ex) {
             return ResponseEntity.unprocessableEntity().build();
         }
         return ResponseEntity.unprocessableEntity().build();
@@ -56,35 +52,53 @@ public class SupermercadoController {
             } else {
                 return ResponseEntity.unprocessableEntity().build();
             }
-        } catch (Exception e) {
+        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
             return ResponseEntity.unprocessableEntity().build();
         }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Supermercados> actualizarSupermercado(@PathVariable int id, @RequestBody Supermercados supermercado) {
-       try {
-                SuperMercadoCola consumidorCola = new SuperMercadoCola();
-            boolean agregado = consumidorCola.actualizar(supermercado);
-            if (agregado) {
-                return ResponseEntity.ok(supermercado);
+        try {
+            SuperMercadoCola consumidorCola = new SuperMercadoCola();
+
+            // Buscamos el supermercado
+            Supermercados[] list = consumidorCola.listar();
+            Supermercados supermercadoEncontrado = null;
+            for (Supermercados sp : list) {
+                if (sp.getIdSupermercados().equals(id)) {
+                    supermercadoEncontrado = sp;
+                }
+            }
+
+            if (supermercadoEncontrado != null) {
+                // Actualizamos el supermercado
+                supermercadoEncontrado.setNombre(supermercado.getNombre());
+                supermercadoEncontrado.setDireccion(supermercado.getDireccion());
             } else {
                 return ResponseEntity.unprocessableEntity().build();
             }
-        } catch (Exception e) {
+
+            boolean agregado = consumidorCola.actualizar(supermercadoEncontrado);
+            if (agregado) {
+                return ResponseEntity.ok(supermercadoEncontrado);
+            } else {
+                return ResponseEntity.unprocessableEntity().build();
+            }
+        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
             return ResponseEntity.unprocessableEntity().build();
         }
-    
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Supermercados> eliminarSupermercado(@PathVariable int id) {
-      
-       Supermercados consumidorOptional = null;
+
+        Supermercados consumidorOptional = null;
         try {
-                SuperMercadoCola consumidorCola = new SuperMercadoCola();
+            SuperMercadoCola consumidorCola = new SuperMercadoCola();
             consumidorOptional = consumidorCola.obtenerID(id);
-        } catch (Exception e) {
+        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
             return ResponseEntity.unprocessableEntity().build();
         }
 
@@ -93,7 +107,7 @@ public class SupermercadoController {
         }
 
         try {
-                SuperMercadoCola consumidorCola = new SuperMercadoCola();
+            SuperMercadoCola consumidorCola = new SuperMercadoCola();
 
             boolean agregado = consumidorCola.eliminar(id);
             if (agregado) {
@@ -101,7 +115,7 @@ public class SupermercadoController {
             } else {
                 return ResponseEntity.unprocessableEntity().build();
             }
-        } catch (Exception e) {
+        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
             return ResponseEntity.unprocessableEntity().build();
         }
     }
@@ -113,7 +127,7 @@ public class SupermercadoController {
         try {
             SuperMercadoCola consumidorCola = new SuperMercadoCola();
             consumidorOptional = consumidorCola.obtenerID(id);
-        } catch (Exception e) {
+        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
             return ResponseEntity.unprocessableEntity().build();
         }
 
@@ -123,7 +137,6 @@ public class SupermercadoController {
             return ResponseEntity.ok(consumidorOptional);
         }
 
-    
     }
 
 }

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,12 +60,31 @@ public class ConsumidorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Consumidores> actualizarConsumidor(@PathVariable Long id, @RequestBody Consumidores consumidor) {
+    public ResponseEntity<Consumidores> actualizarConsumidor(@PathVariable int id, @RequestBody Consumidores consumidor) {
         try {
             ConsumidorCola consumidorCola = new ConsumidorCola();
-            boolean agregado = consumidorCola.actualizar(consumidor);
+
+            Consumidores[] consumidores = consumidorCola.listar();
+            Consumidores consumidorEncontrado = null;
+
+            for (Consumidores con : consumidores) {
+                if (con.getIdConsumidores().equals(id)) {
+                    consumidorEncontrado = con;
+                }
+            }
+
+            if (consumidorEncontrado == null) {
+                return ResponseEntity.unprocessableEntity().build();
+            }
+
+            consumidorEncontrado.setContraseña(consumidor.getContraseña());
+            consumidorEncontrado.setEdad(consumidor.getEdad());
+            consumidorEncontrado.setEmail(consumidor.getEmail());
+            consumidorEncontrado.setNombre(consumidor.getNombre());
+
+            boolean agregado = consumidorCola.actualizar(consumidorEncontrado);
             if (agregado) {
-                return ResponseEntity.ok(consumidor);
+                return ResponseEntity.ok(consumidorEncontrado);
             } else {
                 return ResponseEntity.unprocessableEntity().build();
             }
