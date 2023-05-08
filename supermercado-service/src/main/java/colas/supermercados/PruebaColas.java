@@ -21,7 +21,7 @@ public class PruebaColas {
         // TODO code application logic here
         try {
             ProductoCola productoCola = new ProductoCola();
-            System.out.println("Eliminado; " + Arrays.toString(productoCola.listar()));
+            System.out.println("Productos; " + productoCola.listar()[0].getNombre());
         } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
             System.out.println("Error; " + e.getMessage());
         }
