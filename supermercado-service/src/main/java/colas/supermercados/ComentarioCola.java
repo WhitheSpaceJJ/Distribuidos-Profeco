@@ -5,6 +5,7 @@
 package colas.supermercados;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.ConnectionFactory;
 import entidades.oficial.*;
@@ -44,14 +45,16 @@ public class ComentarioCola implements AutoCloseable {
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                              .headers(Collections.singletonMap("clave", "guardar"))
+                .headers(Collections.singletonMap("clave", "guardar"))
                 .build();
 
-       String jsonString2 = null;
+         String jsonString2 = null;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            jsonString2 = mapper.writeValueAsString(message);
+//            ObjectMapper mapper = new ObjectMapper();
+//            jsonString2 = mapper.writeValueAsString(message);
+            jsonString2=new Gson().toJson(message);
         } catch (Exception e) {
+            System.out.println("Error; "+e.getMessage());
         }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
@@ -89,13 +92,15 @@ public class ComentarioCola implements AutoCloseable {
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                              .headers(Collections.singletonMap("clave", "actualizar"))
+                .headers(Collections.singletonMap("clave", "actualizar"))
                 .build();
-    String jsonString2 = null;
+        String jsonString2 = null;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            jsonString2 = mapper.writeValueAsString(message);
+//            ObjectMapper mapper = new ObjectMapper();
+//            jsonString2 = mapper.writeValueAsString(message);
+            jsonString2=new Gson().toJson(message);
         } catch (Exception e) {
+            System.out.println("Error; "+e.getMessage());
         }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
@@ -133,7 +138,7 @@ public class ComentarioCola implements AutoCloseable {
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                                .headers(Collections.singletonMap("clave", "eliminar"))
+                .headers(Collections.singletonMap("clave", "eliminar"))
                 .build();
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -172,7 +177,7 @@ public class ComentarioCola implements AutoCloseable {
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                 .headers(Collections.singletonMap("clave", "obtener"))
+                .headers(Collections.singletonMap("clave", "obtener"))
                 .build();
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -188,7 +193,7 @@ public class ComentarioCola implements AutoCloseable {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
-               String response2 = null;
+                String response2 = null;
                 Comentarios objeto = null;
                 try {
                     response2 = (String) ois.readObject();
@@ -198,7 +203,7 @@ public class ComentarioCola implements AutoCloseable {
                 if (response2 != null) {
                     try {
                         ObjectMapper mapper = new ObjectMapper();
-                        objeto = mapper.readValue(response2,     Comentarios.class);
+                        objeto = mapper.readValue(response2, Comentarios.class);
                     } catch (Exception e) {
                         System.out.println("Error; " + e.getMessage());
                     }
@@ -208,7 +213,7 @@ public class ComentarioCola implements AutoCloseable {
         }, consumerTag -> {
         });
 
-      Comentarios peticion = response.get();
+        Comentarios peticion = response.get();
         channel.basicCancel(ctag);
         return peticion;
     }
@@ -220,7 +225,7 @@ public class ComentarioCola implements AutoCloseable {
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                 .headers(Collections.singletonMap("clave", "listar"))
+                .headers(Collections.singletonMap("clave", "listar"))
                 .build();
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -236,7 +241,7 @@ public class ComentarioCola implements AutoCloseable {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
-               String response2 = null;
+                String response2 = null;
                 Comentarios[] objeto = null;
                 try {
                     response2 = (String) ois.readObject();
@@ -246,7 +251,7 @@ public class ComentarioCola implements AutoCloseable {
                 if (response2 != null) {
                     try {
                         ObjectMapper mapper = new ObjectMapper();
-                        objeto = mapper.readValue(response2,     Comentarios[].class);
+                        objeto = mapper.readValue(response2, Comentarios[].class);
                     } catch (Exception e) {
                         System.out.println("Error; " + e.getMessage());
                     }

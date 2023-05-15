@@ -33,8 +33,7 @@ public class ConsumidorServicio implements IConsumidorServicio {
             System.err.println("No se pudieron consultar los Consumidores");
             return null;
         }
-        
-           
+
     }
 
     @Override
@@ -84,11 +83,11 @@ public class ConsumidorServicio implements IConsumidorServicio {
     public boolean eliminarConsumidor(int id) {
         try {
             EntityManager em = this.conexion.crearConexion();
-        
+
             em.getTransaction().begin();
-                Consumidores productoBD = null;
+            Consumidores productoBD = null;
             productoBD = em.find(Consumidores.class, id);
-        
+
             em.remove(productoBD);
             em.getTransaction().commit();
             return true;

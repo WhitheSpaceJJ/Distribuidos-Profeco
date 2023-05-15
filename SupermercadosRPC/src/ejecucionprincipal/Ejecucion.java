@@ -20,15 +20,15 @@ public class Ejecucion {
     public static void main(String[] args) {
         // TODO code application logic here
         try {
-            ComentariosRPC comentariosRPC=new ComentariosRPC();
-            ProductosRPC productosRPC=new ProductosRPC();
-            SupermercadosRPC supermercadosRPC=new SupermercadosRPC();
+            ComentariosRPC comentariosRPC = new ComentariosRPC();
+            ProductosRPC productosRPC = new ProductosRPC();
+            SupermercadosRPC supermercadosRPC = new SupermercadosRPC();
             comentariosRPC.run();
             productosRPC.run();
             supermercadosRPC.run();
         } catch (Exception e) {
-            System.out.println("Error; "+e.getMessage());
+            System.out.println("Error; " + e.getMessage());
         }
     }
-    
+
 }

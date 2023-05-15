@@ -1,5 +1,6 @@
 package com.supermercado.service.servicio;
 import entidades.oficial.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ public class ServicioIntegracion implements IServicioIntegracion {
     @Autowired
     private RestTemplate rest;
 
-    private final String URL_CONSUMIDORES = "http://localhost:8060/consumidor";
+    private final String URL_CONSUMIDORES = "http://localhost:5050/consumidor";
 
     /**
      * Obtiene la lista de consumidores del microservicio externo
@@ -33,9 +34,21 @@ public class ServicioIntegracion implements IServicioIntegracion {
      */
     @Override
     public boolean consumidorExists(int consumidorId) {
-        return getConsumidoresFromMicroservice()
-                .stream()
-                .anyMatch(s -> s.getIdConsumidores().equals(consumidorId));
+                            List<Consumidores> listaobtener2=new ArrayList<>();
+        try {
+                    List<Consumidores> listaobtener=getConsumidoresFromMicroservice();
+                    listaobtener2=listaobtener;
+
+        } catch (Exception e) {
+            System.out.println("Error; "+e.getMessage());
+        }
+        for (int i = 0; i < listaobtener2.size(); i++) {
+            Consumidores get = listaobtener2.get(i);
+            if(get.getIdConsumidores()==consumidorId){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

@@ -4,13 +4,10 @@ import colas.consumidor.WhishListCola;
 import com.consumidor.service.servicio.IServicioIntegracion;
 import entidades.oficial.*;
 import java.io.IOException;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -53,6 +50,11 @@ public class WishListController {
                 try {
                     WhishListCola whishListCola = new WhishListCola();
                     if (whishListCola.guardar(wishList)) {
+                        
+                        Wishlist[] lista = whishListCola.listar();
+                        
+                        wishList.setIdWishlist(lista[lista.length-1].getIdWishlist());
+                        
                         return ResponseEntity.ok(wishList);
                     } else {
                         return ResponseEntity.unprocessableEntity().build();
@@ -83,6 +85,7 @@ public class WishListController {
                 return ResponseEntity.unprocessableEntity().build();
             }
 
+            
             if (whishListCola.actualizar(wishListOptional)) {
                 return ResponseEntity.ok(wishListOptional);
             } else {

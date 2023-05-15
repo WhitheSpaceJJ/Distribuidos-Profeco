@@ -1,6 +1,6 @@
-
 package rpc;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
@@ -16,7 +16,6 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 import org.apache.commons.lang3.SerializationUtils;
-
 
 public class ComentariosRPC implements Runnable {
 
@@ -146,17 +145,30 @@ public class ComentariosRPC implements Runnable {
                             List< Comentarios> lista = consumidorServicio.listarTodosLosComentarios();
                             listar = new Comentarios[lista.size()];
                             for (int i = 0; i < listar.length; i++) {
-                                listar[i] = lista.get(i);
+                                Comentarios obtener2 = lista.get(i);
+                                listar[i] = obtener2;
                             }
                         } catch (Exception e) {
                         }
-                        String jsonString = null;
-                        try {
-                            ObjectMapper mapper = new ObjectMapper();
-                            jsonString = mapper.writeValueAsString(listar);
-                        } catch (Exception e) {
+                         ObjectMapper mapper = new ObjectMapper();
+                        StringBuilder jsonBuilder = new StringBuilder();
+                        for (Comentarios elemento : listar) {
+                            try {
+                                String elementoJson = mapper.writeValueAsString(elemento);
+                                jsonBuilder.append(elementoJson);
+
+                                jsonBuilder.append(",");
+                            } catch (JsonProcessingException e) {
+                                System.out.println("Error al convertir el elemento a JSON: " + e.getMessage());
+                            }
                         }
-                        oos.writeObject(jsonString);
+                        if (jsonBuilder.length() > 0) {
+                            jsonBuilder.setLength(jsonBuilder.length() - 1);
+                        }
+                        jsonBuilder.insert(0, "[");
+                        jsonBuilder.append("]");
+                        String jsonString3 = jsonBuilder.toString();
+                        oos.writeObject(jsonString3);
                         byte[] bytes5 = bos.toByteArray();
                         channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, bytes5);
                         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
@@ -168,8 +180,8 @@ public class ComentariosRPC implements Runnable {
 
             channel.basicConsume(RPC_QUEUE_NAME, false, deliverCallback, (consumerTag -> {
             }));
-          } catch (IOException | TimeoutException e) {
-            System.out.println("Error; "+e.getMessage());
+        } catch (IOException | TimeoutException e) {
+            System.out.println("Error; " + e.getMessage());
         }
 
     }

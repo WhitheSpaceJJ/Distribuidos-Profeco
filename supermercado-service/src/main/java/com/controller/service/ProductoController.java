@@ -43,7 +43,20 @@ public class ProductoController {
             producto.setSupermercadoId(supermercadoOptional);
             boolean agregado = productoCola.guardar(producto);
             if (agregado) {
-                return ResponseEntity.ok(producto);
+                 ProductoCola consumidorCola = new ProductoCola();
+            List<Productos> lista = new ArrayList<>();
+            try {
+                Productos[] consumidores = consumidorCola.listar();
+                for (Productos consumidore : consumidores) {
+                    lista.add(consumidore);
+                }
+            } catch (IOException | InterruptedException | ExecutionException e) {
+            }
+            if (!lista.isEmpty()) {
+                producto.setIdProductos(lista.get(lista.size()-1).getIdProductos());
+            }
+            Productos productoObtener=producto;
+                return ResponseEntity.ok(productoObtener);
             } else {
                 return ResponseEntity.unprocessableEntity().build();
             }
@@ -58,7 +71,7 @@ public class ProductoController {
 
         try {
             SuperMercadoCola consumidorCola = new SuperMercadoCola();
-            supermercadoOptional = consumidorCola.obtenerID(id);
+            supermercadoOptional = consumidorCola.obtenerID(producto.getSupermercadoId().getIdSupermercados());
         } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
             return ResponseEntity.unprocessableEntity().build();
         }
@@ -68,6 +81,8 @@ public class ProductoController {
         
         try {
             ProductoCola consumidorCola = new ProductoCola();
+            producto.setIdProductos(id);
+            
             boolean agregado = consumidorCola.actualizar(producto);
             if (agregado) {
                 producto.setSupermercadoId(supermercadoOptional);

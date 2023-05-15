@@ -4,7 +4,10 @@
  */
 package rpc;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -19,6 +22,8 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 import org.apache.commons.lang3.SerializationUtils;
+import org.eclipse.persistence.internal.descriptors.ObjectBuilder;
+import org.eclipse.persistence.mappings.structures.ObjectArrayMapping;
 
 /**
  *
@@ -154,14 +159,29 @@ public class SupermercadosRPC implements Runnable {
                         } catch (Exception e) {
                             System.out.println("Exception: " + e);
                         }
-                        String jsonString2 = null;
-                        try {
-                            ObjectMapper mapper = new ObjectMapper();
-                            jsonString2 = mapper.writeValueAsString(lista);
-                        } catch (Exception e) {
-                            System.out.println("Exception: " + e);
+
+                        ObjectMapper mapper = new ObjectMapper();
+                        StringBuilder jsonBuilder = new StringBuilder();
+                        for (Supermercados elemento : lista) {
+                            try {
+                                String elementoJson = mapper.writeValueAsString(elemento);
+                                jsonBuilder.append(elementoJson);
+
+                                jsonBuilder.append(",");
+                            } catch (JsonProcessingException e) {
+                                System.out.println("Error al convertir el elemento a JSON: " + e.getMessage());
+                            }
                         }
-                        oos.writeObject(jsonString2);
+                        if (jsonBuilder.length() > 0) {
+                            jsonBuilder.setLength(jsonBuilder.length() - 1);
+                        }
+                        jsonBuilder.insert(0, "[");
+                        jsonBuilder.append("]");
+                        String jsonString3 = jsonBuilder.toString();
+
+                        System.out.println(jsonString3);
+                        oos.writeObject(jsonString3);
+
                         byte[] bytes5 = bos.toByteArray();
                         channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, bytes5);
                         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
@@ -173,8 +193,8 @@ public class SupermercadosRPC implements Runnable {
 
             channel.basicConsume(RPC_QUEUE_NAME, false, deliverCallback, (consumerTag -> {
             }));
-          } catch (IOException | TimeoutException e) {
-            System.out.println("Error; "+e.getMessage());
+        } catch (IOException | TimeoutException e) {
+            System.out.println("Error; " + e.getMessage());
         }
     }
 }

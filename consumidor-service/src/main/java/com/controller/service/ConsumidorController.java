@@ -76,7 +76,8 @@ public class ConsumidorController {
             if (consumidorEncontrado == null) {
                 return ResponseEntity.unprocessableEntity().build();
             }
-
+            
+            
             consumidorEncontrado.setContraseña(consumidor.getContraseña());
             consumidorEncontrado.setEdad(consumidor.getEdad());
             consumidorEncontrado.setEmail(consumidor.getEmail());

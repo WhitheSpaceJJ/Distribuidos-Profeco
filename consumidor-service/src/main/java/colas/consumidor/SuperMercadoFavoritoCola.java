@@ -5,6 +5,7 @@
 package colas.consumidor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.ConnectionFactory;
 import entidades.oficial.*;
@@ -45,10 +46,12 @@ public class SuperMercadoFavoritoCola implements AutoCloseable {
                 .replyTo(replyQueueName)
                 .headers(Collections.singletonMap("clave", "guardar"))
                 .build();
-   String jsonString2 = null;
+         String jsonString2 = null;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            jsonString2 = mapper.writeValueAsString(message);
+//            ObjectMapper mapper = new ObjectMapper();
+//            jsonString2 = mapper.writeValueAsString(message);
+            jsonString2 = new Gson().toJson(message);
+
         } catch (Exception e) {
         }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -89,11 +92,12 @@ public class SuperMercadoFavoritoCola implements AutoCloseable {
                 .replyTo(replyQueueName)
                 .headers(Collections.singletonMap("clave", "actualizar"))
                 .build();
-
-   String jsonString2 = null;
+    String jsonString2 = null;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            jsonString2 = mapper.writeValueAsString(message);
+//            ObjectMapper mapper = new ObjectMapper();
+//            jsonString2 = mapper.writeValueAsString(message);
+            jsonString2 = new Gson().toJson(message);
+
         } catch (Exception e) {
         }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();

@@ -5,6 +5,7 @@
 package colas.supermercados;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.ConnectionFactory;
 import entidades.oficial.*;
@@ -48,8 +49,10 @@ public class SuperMercadoCola implements AutoCloseable {
                 .build();
         String jsonString2 = null;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            jsonString2 = mapper.writeValueAsString(message);
+//            ObjectMapper mapper = new ObjectMapper();
+//            jsonString2 = mapper.writeValueAsString(message);
+            jsonString2 = new Gson().toJson(message);
+
         } catch (Exception e) {
         }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -92,15 +95,16 @@ public class SuperMercadoCola implements AutoCloseable {
                 .build();
     String jsonString2 = null;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            jsonString2 = mapper.writeValueAsString(message);
+//            ObjectMapper mapper = new ObjectMapper();
+//            jsonString2 = mapper.writeValueAsString(message);
+            jsonString2 = new Gson().toJson(message);
+
         } catch (Exception e) {
         }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
         oos.writeObject(jsonString2);
         byte[] bytes = bos.toByteArray();
-
 
         channel.basicPublish("", requestQueueName, props, bytes);
 
@@ -198,7 +202,7 @@ public class SuperMercadoCola implements AutoCloseable {
                 if (response2 != null) {
                     try {
                         ObjectMapper mapper = new ObjectMapper();
-                        objeto = mapper.readValue(response2,    Supermercados.class);
+                        objeto = mapper.readValue(response2, Supermercados.class);
                     } catch (Exception e) {
                         System.out.println("Error; " + e.getMessage());
                     }
@@ -236,7 +240,7 @@ public class SuperMercadoCola implements AutoCloseable {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
-               String response2 = null;
+                String response2 = null;
                 Supermercados[] objeto = null;
                 try {
                     response2 = (String) ois.readObject();
@@ -246,12 +250,22 @@ public class SuperMercadoCola implements AutoCloseable {
                 if (response2 != null) {
                     try {
                         ObjectMapper mapper = new ObjectMapper();
-                        objeto = mapper.readValue(response2,    Supermercados[].class);
+                        objeto = mapper.readValue(response2, Supermercados[].class);
                     } catch (Exception e) {
                         System.out.println("Error; " + e.getMessage());
                     }
                 }
                 response.complete(objeto);
+//  ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
+//                ObjectInputStream ois = new ObjectInputStream(bis);
+//                Supermercados[] response2 = null;
+//                try {
+//                    response2 = (Supermercados[]) ois.readObject();
+//                } catch (IOException | ClassNotFoundException ex) {
+//                    System.out.println("Error; " + ex.getMessage());
+//                }
+//
+//                response.complete(response2);
             }
         }, consumerTag -> {
         });

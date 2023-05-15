@@ -4,12 +4,9 @@ import colas.consumidor.SuperMercadoFavoritoCola;
 import com.consumidor.service.servicio.IServicioIntegracion;
 import entidades.oficial.*;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -95,7 +92,9 @@ public class SupermercadoFavoritoController {
         if (spFavoritoOptional == null) {
             return ResponseEntity.unprocessableEntity().build();
         }
+        
         try {
+            spFavorito.setIdFavoritos(id);
             boolean actualizado = superMercadoFavoritoCola.actualizar(spFavorito);
             if (actualizado) {
                 return ResponseEntity.ok(spFavorito);

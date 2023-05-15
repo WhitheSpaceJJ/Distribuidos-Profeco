@@ -18,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 /**
  *
@@ -46,10 +47,12 @@ public class ConsumidorCola implements AutoCloseable {
                 .replyTo(replyQueueName)
                 .headers(Collections.singletonMap("clave", "guardar"))
                 .build();
-        String jsonString2 = null;
+   String jsonString2 = null;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            jsonString2 = mapper.writeValueAsString(message);
+//            ObjectMapper mapper = new ObjectMapper();
+//            jsonString2 = mapper.writeValueAsString(message);
+            jsonString2 = new Gson().toJson(message);
+
         } catch (Exception e) {
         }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -90,11 +93,12 @@ public class ConsumidorCola implements AutoCloseable {
                 .replyTo(replyQueueName)
                 .headers(Collections.singletonMap("clave", "actualizar"))
                 .build();
-
-     String jsonString2 = null;
+    String jsonString2 = null;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            jsonString2 = mapper.writeValueAsString(message);
+//            ObjectMapper mapper = new ObjectMapper();
+//            jsonString2 = mapper.writeValueAsString(message);
+            jsonString2 = new Gson().toJson(message);
+
         } catch (Exception e) {
         }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();

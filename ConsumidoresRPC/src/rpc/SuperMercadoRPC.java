@@ -4,6 +4,7 @@
  */
 package rpc;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
@@ -12,6 +13,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import datos.SupermercadoFavoritoServicio;
 import datosinterfaces.ISupermercadoFavoritoServicio;
+import entidades_consumidor.Consumidores;
 import entidades_consumidor.Supermercadosfavoritos;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
@@ -150,13 +152,27 @@ public class SuperMercadoRPC implements Runnable{
                         }
                     } catch (Exception e) {
                     }
-                    String jsonString2 = null;
-                    try {
-                        ObjectMapper mapper = new ObjectMapper();
-                        jsonString2 = mapper.writeValueAsString(listar);
-                    } catch (Exception e) {
-                    }
-                    oos.writeObject(jsonString2);
+                   ObjectMapper mapper = new ObjectMapper();
+                        StringBuilder jsonBuilder = new StringBuilder();
+                        for (Supermercadosfavoritos elemento : listar) {
+                            try {
+                                String elementoJson = mapper.writeValueAsString(elemento);
+                                jsonBuilder.append(elementoJson);
+
+                                jsonBuilder.append(",");
+                            } catch (JsonProcessingException e) {
+                                System.out.println("Error al convertir el elemento a JSON: " + e.getMessage());
+                            }
+                        }
+                        if (jsonBuilder.length() > 0) {
+                            jsonBuilder.setLength(jsonBuilder.length() - 1);
+                        }
+                        jsonBuilder.insert(0, "[");
+                        jsonBuilder.append("]");
+                        String jsonString3 = jsonBuilder.toString();
+
+                        System.out.println(jsonString3);
+                        oos.writeObject(jsonString3);
                     byte[] bytes5 = bos.toByteArray();
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, bytes5);
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);

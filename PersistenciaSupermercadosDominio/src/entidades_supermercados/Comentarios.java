@@ -31,7 +31,7 @@ public class Comentarios implements Serializable {
     private String mensaje;
     @JoinColumn(name = "supermercado_id", referencedColumnName = "id_supermercados", nullable = false)
     @ManyToOne(optional = false)
-    @JsonBackReference
+       @JsonBackReference
     private Supermercados supermercadoId;
 
     public Comentarios() {

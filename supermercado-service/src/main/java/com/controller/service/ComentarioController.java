@@ -49,8 +49,23 @@ public class ComentarioController {
             ComentarioCola consumidorCola = new ComentarioCola();
             boolean agregado = consumidorCola.guardar(comentario);
             if (agregado) {
-                comentario.setSupermercadoId(supermercadoOptional);
-                return ResponseEntity.ok(comentario);
+
+                List<Comentarios> lista = new ArrayList<>();
+                try {
+                    Comentarios[] consumidores = consumidorCola.listar();
+                    for (int i = 0; i < consumidores.length; i++) {
+                        Comentarios consumidore = consumidores[i];
+                        lista.add(consumidore);
+                    }
+                } catch (IOException | InterruptedException | ExecutionException e) {
+                }
+                if (!lista.isEmpty()) {
+                    comentario.setIdComentarios(lista.get(lista.size() - 1).getIdComentarios());
+                }
+                Comentarios comentarioOficial = comentario;
+                System.out.println(comentarioOficial.getIdComentarios());
+                return ResponseEntity.ok(comentarioOficial);
+
             } else {
                 return ResponseEntity.unprocessableEntity().build();
             }
@@ -67,7 +82,7 @@ public class ComentarioController {
 
         try {
             SuperMercadoCola consumidorCola = new SuperMercadoCola();
-            supermercadoOptional = consumidorCola.obtenerID(id);
+            supermercadoOptional = consumidorCola.obtenerID(comentario.getSupermercadoId().getIdSupermercados());
         } catch (Exception e) {
             return ResponseEntity.unprocessableEntity().build();
         }
@@ -77,6 +92,7 @@ public class ComentarioController {
 
         try {
             ComentarioCola consumidorCola = new ComentarioCola();
+            comentario.setIdComentarios(id);
             boolean agregado = consumidorCola.actualizar(comentario);
             if (agregado) {
                 comentario.setSupermercadoId(supermercadoOptional);

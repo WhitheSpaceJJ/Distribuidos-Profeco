@@ -1,6 +1,7 @@
 package colas.supermercados;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.ConnectionFactory;
 import entidades.oficial.Productos;
@@ -40,8 +41,10 @@ public class ProductoCola implements AutoCloseable {
                 .build();
         String jsonString2 = null;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            jsonString2 = mapper.writeValueAsString(message);
+//            ObjectMapper mapper = new ObjectMapper();
+//            jsonString2 = mapper.writeValueAsString(message);
+            jsonString2 = new Gson().toJson(message);
+
         } catch (Exception e) {
         }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -85,8 +88,10 @@ public class ProductoCola implements AutoCloseable {
 
         String jsonString2 = null;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            jsonString2 = mapper.writeValueAsString(message);
+//            ObjectMapper mapper = new ObjectMapper();
+//            jsonString2 = mapper.writeValueAsString(message);
+            jsonString2 = new Gson().toJson(message);
+
         } catch (Exception e) {
         }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();

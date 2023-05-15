@@ -1,11 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package colas.supermercados;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.ConnectionFactory;
 import entidades.oficial.Productos;
@@ -22,22 +18,22 @@ import java.util.concurrent.TimeoutException;
 
 public class ProductoCola implements AutoCloseable {
 
-    private com.rabbitmq.client.Connection connection;
-    private com.rabbitmq.client.Channel channel;
-    private String requestQueueName = "rpc_queue_productos";
+    private final com.rabbitmq.client.Connection CONNECTION;
+    private final com.rabbitmq.client.Channel CHANNEL;
+    private final String REQUEST_QUEUE_NAME = "rpc_queue_productos";
 
     public ProductoCola() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
 
-        connection = factory.newConnection();
-        channel = connection.createChannel();
+        CONNECTION = factory.newConnection();
+        CHANNEL = CONNECTION.createChannel();
     }
 
     public boolean guardar(Productos message) throws IOException, InterruptedException, ExecutionException {
         final String corrId = UUID.randomUUID().toString();
 
-        String replyQueueName = channel.queueDeclare().getQueue();
+        String replyQueueName = CHANNEL.queueDeclare().getQueue();
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
@@ -45,8 +41,10 @@ public class ProductoCola implements AutoCloseable {
                 .build();
         String jsonString2 = null;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            jsonString2 = mapper.writeValueAsString(message);
+//            ObjectMapper mapper = new ObjectMapper();
+//            jsonString2 = mapper.writeValueAsString(message);
+            jsonString2 = new Gson().toJson(message);
+
         } catch (Exception e) {
         }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -54,11 +52,11 @@ public class ProductoCola implements AutoCloseable {
         oos.writeObject(jsonString2);
         byte[] bytes = bos.toByteArray();
 
-        channel.basicPublish("", requestQueueName, props, bytes);
+        CHANNEL.basicPublish("", REQUEST_QUEUE_NAME, props, bytes);
 
         final CompletableFuture<Boolean> response = new CompletableFuture<>();
 
-        String ctag = channel.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
+        String ctag = CHANNEL.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
@@ -74,14 +72,14 @@ public class ProductoCola implements AutoCloseable {
         });
 
         Boolean peticion = response.get();
-        channel.basicCancel(ctag);
+        CHANNEL.basicCancel(ctag);
         return peticion;
     }
 
     public boolean actualizar(Productos message) throws IOException, InterruptedException, ExecutionException {
         final String corrId = UUID.randomUUID().toString();
 
-        String replyQueueName = channel.queueDeclare().getQueue();
+        String replyQueueName = CHANNEL.queueDeclare().getQueue();
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
@@ -90,8 +88,10 @@ public class ProductoCola implements AutoCloseable {
 
         String jsonString2 = null;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            jsonString2 = mapper.writeValueAsString(message);
+//            ObjectMapper mapper = new ObjectMapper();
+//            jsonString2 = mapper.writeValueAsString(message);
+            jsonString2 = new Gson().toJson(message);
+
         } catch (Exception e) {
         }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -99,11 +99,11 @@ public class ProductoCola implements AutoCloseable {
         oos.writeObject(jsonString2);
         byte[] bytes = bos.toByteArray();
 
-        channel.basicPublish("", requestQueueName, props, bytes);
+        CHANNEL.basicPublish("", REQUEST_QUEUE_NAME, props, bytes);
 
         final CompletableFuture<Boolean> response = new CompletableFuture<>();
 
-        String ctag = channel.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
+        String ctag = CHANNEL.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
@@ -119,14 +119,14 @@ public class ProductoCola implements AutoCloseable {
         });
 
         Boolean peticion = response.get();
-        channel.basicCancel(ctag);
+        CHANNEL.basicCancel(ctag);
         return peticion;
     }
 
     public boolean eliminar(int id) throws IOException, InterruptedException, ExecutionException {
         final String corrId = UUID.randomUUID().toString();
 
-        String replyQueueName = channel.queueDeclare().getQueue();
+        String replyQueueName = CHANNEL.queueDeclare().getQueue();
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
@@ -138,11 +138,11 @@ public class ProductoCola implements AutoCloseable {
         oos.writeObject(id);
         byte[] bytes = bos.toByteArray();
 
-        channel.basicPublish("", requestQueueName, props, bytes);
+        CHANNEL.basicPublish("", REQUEST_QUEUE_NAME, props, bytes);
 
         final CompletableFuture<Boolean> response = new CompletableFuture<>();
 
-        String ctag = channel.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
+        String ctag = CHANNEL.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
@@ -158,14 +158,14 @@ public class ProductoCola implements AutoCloseable {
         });
 
         Boolean peticion = response.get();
-        channel.basicCancel(ctag);
+        CHANNEL.basicCancel(ctag);
         return peticion;
     }
 
     public Productos obtenerID(int id) throws IOException, InterruptedException, ExecutionException {
         final String corrId = UUID.randomUUID().toString();
 
-        String replyQueueName = channel.queueDeclare().getQueue();
+        String replyQueueName = CHANNEL.queueDeclare().getQueue();
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
@@ -177,11 +177,11 @@ public class ProductoCola implements AutoCloseable {
         oos.writeObject(id);
         byte[] bytes = bos.toByteArray();
 
-        channel.basicPublish("", requestQueueName, props, bytes);
+        CHANNEL.basicPublish("", REQUEST_QUEUE_NAME, props, bytes);
 
         final CompletableFuture<Productos> response = new CompletableFuture<>();
 
-        String ctag = channel.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
+        String ctag = CHANNEL.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
@@ -206,14 +206,14 @@ public class ProductoCola implements AutoCloseable {
         });
 
         Productos peticion = response.get();
-        channel.basicCancel(ctag);
+        CHANNEL.basicCancel(ctag);
         return peticion;
     }
 
     public Productos[] listar() throws IOException, InterruptedException, ExecutionException {
         final String corrId = UUID.randomUUID().toString();
 
-        String replyQueueName = channel.queueDeclare().getQueue();
+        String replyQueueName = CHANNEL.queueDeclare().getQueue();
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
@@ -225,11 +225,11 @@ public class ProductoCola implements AutoCloseable {
         oos.writeObject("listar");
         byte[] bytes = bos.toByteArray();
 
-        channel.basicPublish("", requestQueueName, props, bytes);
+        CHANNEL.basicPublish("", REQUEST_QUEUE_NAME, props, bytes);
 
         final CompletableFuture<Productos[]> response = new CompletableFuture<>();
 
-        String ctag = channel.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
+        String ctag = CHANNEL.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
             if (delivery.getProperties().getCorrelationId().equals(corrId)) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(delivery.getBody());
                 ObjectInputStream ois = new ObjectInputStream(bis);
@@ -254,12 +254,12 @@ public class ProductoCola implements AutoCloseable {
         });
 
         Productos[] peticion = (Productos[]) response.get();
-        channel.basicCancel(ctag);
+        CHANNEL.basicCancel(ctag);
         return peticion;
     }
 
     public void close() throws IOException {
-        connection.close();
+        CONNECTION.close();
     }
 
 }
