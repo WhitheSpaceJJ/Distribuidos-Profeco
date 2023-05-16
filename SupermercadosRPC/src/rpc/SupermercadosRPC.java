@@ -4,6 +4,7 @@
  */
 package rpc;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +16,8 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import datos.SupermercadosServicio;
 import datosinterfaces.ISupermercados;
+import entidades_supermercados.Comentarios;
+import entidades_supermercados.Productos;
 import entidades_supermercados.Supermercados;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -49,6 +52,9 @@ public class SupermercadosRPC implements Runnable {
             System.out.println(" [x] Awaiting RPC requests, supermercado");
 
             DeliverCallback deliverCallback = (var consumerTag, var delivery) -> {
+                
+                
+                
                 AMQP.BasicProperties replyProps = new AMQP.BasicProperties.Builder()
                         .correlationId(delivery.getProperties().getCorrelationId())
                         .build();
@@ -96,6 +102,7 @@ public class SupermercadosRPC implements Runnable {
                         Supermercados peticion2 = null;
                         try {
                             ObjectMapper mapper = new ObjectMapper();
+                            
                             peticion2 = mapper.readValue(peticion76, Supermercados.class);
                         } catch (Exception e) {
                             System.out.println("Error; " + e.getMessage());
@@ -138,11 +145,25 @@ public class SupermercadosRPC implements Runnable {
                         Supermercados obtener = null;
                         try {
                             obtener = consumidorServicio.obtenerSupermercadosPorId(peticion4);
+                            List<Productos> listaP=obtener.getProductosList();
+                            List<Comentarios> listaC=obtener.getComentariosList();
+                            for (int i = 0; i < listaC.size(); i++) {
+                                Comentarios get = listaC.get(i);
+                                get.setSupermercadoId(null);
+                            }
+                            for (int i = 0; i < listaP.size(); i++) {
+                                Productos get = listaP.get(i);
+                                get.setSupermercadoId(null);
+                            }
+                            obtener.setComentariosList(listaC);
+                            obtener.setProductosList(listaP);
                         } catch (Exception e) {
                         }
                         String jsonString = null;
                         try {
                             ObjectMapper mapper = new ObjectMapper();
+                            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
                             jsonString = mapper.writeValueAsString(obtener);
                         } catch (Exception e) {
                         }
@@ -163,7 +184,23 @@ public class SupermercadosRPC implements Runnable {
                         ObjectMapper mapper = new ObjectMapper();
                         StringBuilder jsonBuilder = new StringBuilder();
                         for (Supermercados elemento : lista) {
+                            
+                            List<Productos> listaP=elemento.getProductosList();
+                            List<Comentarios> listaC=elemento.getComentariosList();
+                            for (int i = 0; i < listaC.size(); i++) {
+                                Comentarios get = listaC.get(i);
+                                get.setSupermercadoId(null);
+                            }
+                            for (int i = 0; i < listaP.size(); i++) {
+                                Productos get = listaP.get(i);
+                                get.setSupermercadoId(null);
+                            }
+                            elemento.setComentariosList(listaC);
+                            elemento.setProductosList(listaP);
+                            
                             try {
+                                mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
                                 String elementoJson = mapper.writeValueAsString(elemento);
                                 jsonBuilder.append(elementoJson);
 

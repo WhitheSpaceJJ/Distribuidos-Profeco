@@ -1,8 +1,8 @@
 package com.controller.service;
 
+import entidades.oficial.Wishlist;
 import colas.consumidor.WhishListCola;
 import com.consumidor.service.servicio.IServicioIntegracion;
-import entidades.oficial.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,11 +50,11 @@ public class WishListController {
                 try {
                     WhishListCola whishListCola = new WhishListCola();
                     if (whishListCola.guardar(wishList)) {
-                        
+
                         Wishlist[] lista = whishListCola.listar();
-                        
-                        wishList.setIdWishlist(lista[lista.length-1].getIdWishlist());
-                        
+
+                        wishList.setIdWishlist(lista[lista.length - 1].getIdWishlist());
+
                         return ResponseEntity.ok(wishList);
                     } else {
                         return ResponseEntity.unprocessableEntity().build();
@@ -85,7 +85,10 @@ public class WishListController {
                 return ResponseEntity.unprocessableEntity().build();
             }
 
-            
+            wishListOptional.setDeseo(wishList.getDeseo());
+            wishListOptional.setSupermercadoId(wishList.getSupermercadoId());
+            wishListOptional.setConsumidorId(wishList.getConsumidorId());
+
             if (whishListCola.actualizar(wishListOptional)) {
                 return ResponseEntity.ok(wishListOptional);
             } else {

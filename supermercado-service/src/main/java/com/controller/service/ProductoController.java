@@ -2,8 +2,8 @@ package com.controller.service;
 
 import colas.supermercados.ProductoCola;
 import colas.supermercados.SuperMercadoCola;
-import entidades.oficial.*;
-
+import entidades.oficial.Productos;
+import entidades.oficial.Supermercados;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,25 +37,26 @@ public class ProductoController {
         if (supermercadoOptional == null) {
             return ResponseEntity.unprocessableEntity().build();
         }
-        
+
         try {
             ProductoCola productoCola = new ProductoCola();
-            producto.setSupermercadoId(supermercadoOptional);
+            Supermercados supermercados = new Supermercados(supermercadoOptional.getIdSupermercados());
+            producto.setSupermercadoId(supermercados);
             boolean agregado = productoCola.guardar(producto);
             if (agregado) {
-                 ProductoCola consumidorCola = new ProductoCola();
-            List<Productos> lista = new ArrayList<>();
-            try {
-                Productos[] consumidores = consumidorCola.listar();
-                for (Productos consumidore : consumidores) {
-                    lista.add(consumidore);
+                ProductoCola consumidorCola = new ProductoCola();
+                List<Productos> lista = new ArrayList<>();
+                try {
+                    Productos[] consumidores = consumidorCola.listar();
+                    for (Productos consumidore : consumidores) {
+                        lista.add(consumidore);
+                    }
+                } catch (IOException | InterruptedException | ExecutionException e) {
                 }
-            } catch (IOException | InterruptedException | ExecutionException e) {
-            }
-            if (!lista.isEmpty()) {
-                producto.setIdProductos(lista.get(lista.size()-1).getIdProductos());
-            }
-            Productos productoObtener=producto;
+                if (!lista.isEmpty()) {
+                    producto.setIdProductos(lista.get(lista.size() - 1).getIdProductos());
+                }
+                Productos productoObtener = producto;
                 return ResponseEntity.ok(productoObtener);
             } else {
                 return ResponseEntity.unprocessableEntity().build();
@@ -78,11 +79,11 @@ public class ProductoController {
         if (supermercadoOptional == null) {
             return ResponseEntity.unprocessableEntity().build();
         }
-        
+
         try {
             ProductoCola consumidorCola = new ProductoCola();
             producto.setIdProductos(id);
-            
+
             boolean agregado = consumidorCola.actualizar(producto);
             if (agregado) {
                 producto.setSupermercadoId(supermercadoOptional);
@@ -144,21 +145,21 @@ public class ProductoController {
         return ResponseEntity.unprocessableEntity().build();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Productos> obtenerProductoPorId(@PathVariable int id) {
-        Productos consumidorOptional = null;
-        try {
-            ProductoCola consumidorCola = new ProductoCola();
-            consumidorOptional = consumidorCola.obtenerID(id);
-        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
-            return ResponseEntity.unprocessableEntity().build();
-        }
-
-        if (consumidorOptional == null) {
-            return ResponseEntity.unprocessableEntity().build();
-        } else {
-            return ResponseEntity.ok(consumidorOptional);
-        }
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Productos> obtenerProductoPorId(@PathVariable int id) {
+//        Productos consumidorOptional = null;
+//        try {
+//            ProductoCola consumidorCola = new ProductoCola();
+//            consumidorOptional = consumidorCola.obtenerID(id);
+//        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
+//            return ResponseEntity.unprocessableEntity().build();
+//        }
+//
+//        if (consumidorOptional == null) {
+//            return ResponseEntity.unprocessableEntity().build();
+//        } else {
+//            return ResponseEntity.ok(consumidorOptional);
+//        }
+//    }
 
 }

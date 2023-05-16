@@ -4,6 +4,7 @@
  */
 package rpc;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
@@ -131,11 +132,15 @@ public class WhislListRPC implements Runnable {
                         Wishlist obtener = null;
                         try {
                             obtener = consumidorServicio.obtenerWishListPorId(peticion4);
+                            obtener.getConsumidorId().setSupermercadosfavoritosList(null);
+                            obtener.getConsumidorId().setWishlistList(null);
                         } catch (Exception e) {
                         }
                         String jsonString = null;
                         try {
                             ObjectMapper mapper = new ObjectMapper();
+                                                        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
                             jsonString = mapper.writeValueAsString(obtener);
                         } catch (Exception e) {
                         }
@@ -154,10 +159,14 @@ public class WhislListRPC implements Runnable {
                             }
                         } catch (Exception e) {
                         }
-                    ObjectMapper mapper = new ObjectMapper();
+                        ObjectMapper mapper = new ObjectMapper();
                         StringBuilder jsonBuilder = new StringBuilder();
                         for (Wishlist elemento : listar) {
+                            elemento.getConsumidorId().setSupermercadosfavoritosList(null);
+                            elemento.getConsumidorId().setWishlistList(null);
                             try {
+                                                            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
                                 String elementoJson = mapper.writeValueAsString(elemento);
                                 jsonBuilder.append(elementoJson);
 

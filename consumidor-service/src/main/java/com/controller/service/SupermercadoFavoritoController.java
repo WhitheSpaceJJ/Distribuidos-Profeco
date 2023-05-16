@@ -1,5 +1,6 @@
 package com.controller.service;
 
+import entidades.oficial.Supermercadosfavoritos;
 import colas.consumidor.SuperMercadoFavoritoCola;
 import com.consumidor.service.servicio.IServicioIntegracion;
 import entidades.oficial.*;
@@ -36,6 +37,7 @@ public class SupermercadoFavoritoController {
                 Supermercadosfavoritos supermercadosfavoritose = supermercadosfavoritoses[i];
                 supermercadosfavoritoses1.add(supermercadosfavoritose);
             }
+            
             return ResponseEntity.ok(supermercadosfavoritoses1);
         } catch (Exception e) {
             return ResponseEntity.unprocessableEntity().build();
@@ -56,6 +58,9 @@ public class SupermercadoFavoritoController {
                     SuperMercadoFavoritoCola superMercadoFavoritoCola = new SuperMercadoFavoritoCola();
                     boolean agregado = superMercadoFavoritoCola.guardar(spFavorito);
                     if (agregado) {
+                        Supermercadosfavoritos[] array = superMercadoFavoritoCola.listar();
+                        spFavorito.setIdFavoritos(array[array.length-1].getIdFavoritos());
+                        
                         return ResponseEntity.ok(spFavorito);
                     } else {
                         return ResponseEntity.unprocessableEntity().build();
@@ -69,47 +74,47 @@ public class SupermercadoFavoritoController {
         }
         return ResponseEntity.unprocessableEntity().build();
     }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Supermercadosfavoritos> actualizarSupermercadoFavorito(@PathVariable int id, @RequestBody Supermercadosfavoritos spFavorito) {
-        Supermercadosfavoritos spFavoritoOptional = null;
-        SuperMercadoFavoritoCola superMercadoFavoritoCola = null;
-        try {
-            superMercadoFavoritoCola = new SuperMercadoFavoritoCola();
-        } catch (IOException ex) {
-            return ResponseEntity.unprocessableEntity().build();
-        } catch (TimeoutException ex) {
-            return ResponseEntity.unprocessableEntity().build();
-        }
-
-        try {
-            spFavoritoOptional = superMercadoFavoritoCola.obtenerID(id);
-
-        } catch (Exception e) {
-            return ResponseEntity.unprocessableEntity().build();
-        }
-
-        if (spFavoritoOptional == null) {
-            return ResponseEntity.unprocessableEntity().build();
-        }
-        
-        try {
-            spFavorito.setIdFavoritos(id);
-            boolean actualizado = superMercadoFavoritoCola.actualizar(spFavorito);
-            if (actualizado) {
-                return ResponseEntity.ok(spFavorito);
-            } else {
-                return ResponseEntity.unprocessableEntity().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.unprocessableEntity().build();
-        }
-
-    }
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Supermercadosfavoritos> actualizarSupermercadoFavorito(@PathVariable int id, @RequestBody Supermercadosfavoritos spFavorito) {
+//        Supermercadosfavoritos spFavoritoOptional = null;
+//        SuperMercadoFavoritoCola superMercadoFavoritoCola = null;
+//        try {
+//            superMercadoFavoritoCola = new SuperMercadoFavoritoCola();
+//        } catch (IOException ex) {
+//            return ResponseEntity.unprocessableEntity().build();
+//        } catch (TimeoutException ex) {
+//            return ResponseEntity.unprocessableEntity().build();
+//        }
+//
+//        try {
+//            spFavoritoOptional = superMercadoFavoritoCola.obtenerID(id);
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.unprocessableEntity().build();
+//        }
+//
+//        if (spFavoritoOptional == null) {
+//            return ResponseEntity.unprocessableEntity().build();
+//        }
+//        
+//        try {
+//            spFavorito.setIdFavoritos(id);
+//            boolean actualizado = superMercadoFavoritoCola.actualizar(spFavorito);
+//            if (actualizado) {
+//                return ResponseEntity.ok(spFavorito);
+//            } else {
+//                return ResponseEntity.unprocessableEntity().build();
+//            }
+//        } catch (Exception e) {
+//            return ResponseEntity.unprocessableEntity().build();
+//        }
+//
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Supermercadosfavoritos> eliminarSupermercadoFavorito(@PathVariable int id) {
-          Supermercadosfavoritos spFavoritoOptional = null;
+        Supermercadosfavoritos spFavoritoOptional = null;
         SuperMercadoFavoritoCola superMercadoFavoritoCola = null;
         try {
             superMercadoFavoritoCola = new SuperMercadoFavoritoCola();
@@ -141,30 +146,29 @@ public class SupermercadoFavoritoController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Supermercadosfavoritos> encontrarSupermercadoFavoritoPorId(@PathVariable int id) {
-        Supermercadosfavoritos spFavoritoOptional = null;
-        SuperMercadoFavoritoCola superMercadoFavoritoCola = null;
-        try {
-            superMercadoFavoritoCola = new SuperMercadoFavoritoCola();
-        } catch (IOException ex) {
-            return ResponseEntity.unprocessableEntity().build();
-        } catch (TimeoutException ex) {
-            return ResponseEntity.unprocessableEntity().build();
-        }
-
-        try {
-            spFavoritoOptional = superMercadoFavoritoCola.obtenerID(id);
-
-        } catch (Exception e) {
-            return ResponseEntity.unprocessableEntity().build();
-        }
-
-        if (spFavoritoOptional == null) {
-            return ResponseEntity.unprocessableEntity().build();
-        }else{
-        return ResponseEntity.ok(spFavoritoOptional);
-        }
-    }
-
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Supermercadosfavoritos> encontrarSupermercadoFavoritoPorId(@PathVariable int id) {
+//        Supermercadosfavoritos spFavoritoOptional = null;
+//        SuperMercadoFavoritoCola superMercadoFavoritoCola = null;
+//        try {
+//            superMercadoFavoritoCola = new SuperMercadoFavoritoCola();
+//        } catch (IOException ex) {
+//            return ResponseEntity.unprocessableEntity().build();
+//        } catch (TimeoutException ex) {
+//            return ResponseEntity.unprocessableEntity().build();
+//        }
+//
+//        try {
+//            spFavoritoOptional = superMercadoFavoritoCola.obtenerID(id);
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.unprocessableEntity().build();
+//        }
+//
+//        if (spFavoritoOptional == null) {
+//            return ResponseEntity.unprocessableEntity().build();
+//        }else{
+//        return ResponseEntity.ok(spFavoritoOptional);
+//        }
+//    }
 }

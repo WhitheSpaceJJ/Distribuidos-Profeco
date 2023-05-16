@@ -5,6 +5,11 @@
 package entidades.oficial;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -35,7 +40,7 @@ public class Supermercadosfavoritos implements Serializable {
     private int supermercadoId;
     @JoinColumn(name = "consumidor_id", referencedColumnName = "id_consumidores", nullable = false)
     @ManyToOne(optional = false)
-        @JsonBackReference
+   // @JsonManagedReference
     private Consumidores consumidorId;
   
     public Supermercadosfavoritos() {
@@ -96,7 +101,8 @@ public class Supermercadosfavoritos implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades_consumidor.Supermercadosfavoritos[ idFavoritos=" + idFavoritos + " ]";
+        return "Supermercadosfavoritos{" + "idFavoritos=" + idFavoritos + ", supermercadoId=" + supermercadoId + ", consumidorId=" + consumidorId + '}';
     }
+
     
 }

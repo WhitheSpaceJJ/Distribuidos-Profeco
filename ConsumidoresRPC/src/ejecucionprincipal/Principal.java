@@ -21,11 +21,13 @@ public class Principal {
         // TODO code application logic here
         try {
             ConsumidoresRPC consumidoresRPC=new ConsumidoresRPC();
-            SuperMercadoRPC superMercadoRPC=new SuperMercadoRPC();
-            WhislListRPC whislListRPC=new WhislListRPC();
+        
             consumidoresRPC.run();
+                   SuperMercadoRPC superMercadoRPC=new SuperMercadoRPC();
             superMercadoRPC.run();
+               WhislListRPC whislListRPC=new WhislListRPC();
             whislListRPC.run();
+            
         } catch (Exception e) {
             System.out.println("Error; "+e.getMessage());
         }

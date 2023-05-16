@@ -4,7 +4,12 @@
  */
 package entidades_consumidor;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -43,13 +48,14 @@ public class Consumidores implements Serializable {
     @Basic(optional = false)
     @Column(name = "edad", nullable = false)
     private int edad;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "consumidorId")
-        @JsonManagedReference
-    private List<Wishlist> wishlistList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "consumidorId")
-        @JsonManagedReference
-    private List<Supermercadosfavoritos> supermercadosfavoritosList;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "consumidorId")
+   // @JsonBackReference
+    private List<Wishlist> wishlistList;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "consumidorId")
+   // @JsonBackReference
+    private List<Supermercadosfavoritos> supermercadosfavoritosList;
 
     public Consumidores() {
     }
@@ -146,6 +152,5 @@ public class Consumidores implements Serializable {
     public String toString() {
         return "Consumidores{" + "idConsumidores=" + idConsumidores + ", nombre=" + nombre + ", contrase\u00f1a=" + contraseña + ", email=" + email + ", edad=" + edad + ", wishlistList=" + wishlistList + ", supermercadosfavoritosList=" + supermercadosfavoritosList + '}';
     }
-
 
 }

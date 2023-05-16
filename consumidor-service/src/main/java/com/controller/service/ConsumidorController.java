@@ -1,7 +1,7 @@
 package com.controller.service;
 
+import entidades.oficial.Consumidores;
 import colas.consumidor.ConsumidorCola;
-import entidades.oficial.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +50,9 @@ public class ConsumidorController {
             ConsumidorCola consumidorCola = new ConsumidorCola();
             boolean agregado = consumidorCola.guardar(consumidor);
             if (agregado) {
+                Consumidores[] array = consumidorCola.listar();
+                consumidor.setIdConsumidores(array[array.length-1].getIdConsumidores());
+                
                 return ResponseEntity.ok(consumidor);
             } else {
                 return ResponseEntity.unprocessableEntity().build();

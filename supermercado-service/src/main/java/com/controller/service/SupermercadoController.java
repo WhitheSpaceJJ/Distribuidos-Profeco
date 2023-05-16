@@ -1,7 +1,9 @@
 package com.controller.service;
 
 import colas.supermercados.SuperMercadoCola;
-import entidades.oficial.*;
+import entidades.oficial.Comentarios;
+import entidades.oficial.Productos;
+import entidades.oficial.Supermercados;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -139,23 +141,23 @@ public class SupermercadoController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Supermercados> encontrarSupermercadoPorId(@PathVariable int id) {
-
-        Supermercados consumidorOptional = null;
-        try {
-            SuperMercadoCola consumidorCola = new SuperMercadoCola();
-            consumidorOptional = consumidorCola.obtenerID(id);
-        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
-            return ResponseEntity.unprocessableEntity().build();
-        }
-
-        if (consumidorOptional == null) {
-            return ResponseEntity.unprocessableEntity().build();
-        } else {
-            return ResponseEntity.ok(consumidorOptional);
-        }
-
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Supermercados> encontrarSupermercadoPorId(@PathVariable int id) {
+//
+//        Supermercados consumidorOptional = null;
+//        try {
+//            SuperMercadoCola consumidorCola = new SuperMercadoCola();
+//            consumidorOptional = consumidorCola.obtenerID(id);
+//        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
+//            return ResponseEntity.unprocessableEntity().build();
+//        }
+//
+//        if (consumidorOptional == null) {
+//            return ResponseEntity.unprocessableEntity().build();
+//        } else {
+//            return ResponseEntity.ok(consumidorOptional);
+//        }
+//
+//    }
 
 }

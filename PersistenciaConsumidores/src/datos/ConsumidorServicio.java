@@ -28,7 +28,9 @@ public class ConsumidorServicio implements IConsumidorServicio {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(Consumidores.class));
             Query q = em.createQuery(cq);
-            return q.getResultList();
+            List<Consumidores> consumidores=q.getResultList();
+        
+            return consumidores;
         } catch (IllegalStateException ise) {
             System.err.println("No se pudieron consultar los Consumidores");
             return null;

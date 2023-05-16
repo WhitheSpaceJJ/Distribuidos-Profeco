@@ -5,6 +5,11 @@
 package entidades_consumidor;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -22,6 +27,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "wishlist")
+
 public class Wishlist implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,9 +42,10 @@ public class Wishlist implements Serializable {
     @Basic(optional = false)
     @Column(name = "supermercado_id", nullable = false)
     private int supermercadoId;
+
     @JoinColumn(name = "consumidor_id", referencedColumnName = "id_consumidores", nullable = false)
     @ManyToOne(optional = false)
-        @JsonBackReference
+   //     @JsonManagedReference
     private Consumidores consumidorId;
   
     public Wishlist() {
@@ -108,7 +115,8 @@ public class Wishlist implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades_consumidor.Wishlist[ idWishlist=" + idWishlist + " ]";
+        return "Wishlist{" + "idWishlist=" + idWishlist + ", deseo=" + deseo + ", supermercadoId=" + supermercadoId + ", consumidorId=" + consumidorId + '}';
     }
+
     
 }

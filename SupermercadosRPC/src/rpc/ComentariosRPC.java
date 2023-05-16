@@ -1,5 +1,6 @@
 package rpc;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
@@ -125,11 +126,15 @@ public class ComentariosRPC implements Runnable {
                         Comentarios obtener = null;
                         try {
                             obtener = consumidorServicio.obtenerComentariosPorId(peticion4);
+                            obtener.getSupermercadoId().setComentariosList(null);
+                            obtener.getSupermercadoId().setProductosList(null);
                         } catch (Exception e) {
                         }
                         String jsonString2 = null;
                         try {
                             ObjectMapper mapper = new ObjectMapper();
+                                                        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
                             jsonString2 = mapper.writeValueAsString(obtener);
                         } catch (Exception e) {
                         }
@@ -145,15 +150,19 @@ public class ComentariosRPC implements Runnable {
                             List< Comentarios> lista = consumidorServicio.listarTodosLosComentarios();
                             listar = new Comentarios[lista.size()];
                             for (int i = 0; i < listar.length; i++) {
+                                lista.get(i).getSupermercadoId().setComentariosList(null);
+                                lista.get(i).getSupermercadoId().setProductosList(null);
                                 Comentarios obtener2 = lista.get(i);
                                 listar[i] = obtener2;
                             }
                         } catch (Exception e) {
                         }
-                         ObjectMapper mapper = new ObjectMapper();
+                        ObjectMapper mapper = new ObjectMapper();
                         StringBuilder jsonBuilder = new StringBuilder();
                         for (Comentarios elemento : listar) {
                             try {
+                                                            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
                                 String elementoJson = mapper.writeValueAsString(elemento);
                                 jsonBuilder.append(elementoJson);
 

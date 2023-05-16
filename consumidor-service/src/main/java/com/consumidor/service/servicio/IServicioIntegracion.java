@@ -4,6 +4,7 @@
  */
 package com.consumidor.service.servicio;
 
+import entidades.oficial.Supermercados;
 import entidades.oficial.*;
 import java.util.List;
 

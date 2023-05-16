@@ -1,7 +1,12 @@
 
 package entidades_supermercados;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -17,6 +22,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "supermercados")
+
 public class Supermercados implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,11 +37,13 @@ public class Supermercados implements Serializable {
     @Basic(optional = false)
     @Column(name = "direccion", nullable = false, length = 500)
     private String direccion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "supermercadoId")
-    @JsonManagedReference
+
+     @OneToMany(cascade = CascadeType.ALL, mappedBy = "supermercadoId")
+   // @JsonBackReference
     private List<Comentarios> comentariosList;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "supermercadoId")
-    @JsonManagedReference
+   // @JsonBackReference
     private List<Productos> productosList;
 
     public Supermercados() {
@@ -113,7 +121,9 @@ public class Supermercados implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades_supermercados.Supermercados[ idSupermercados=" + idSupermercados + " ]";
+        return "Supermercados{" + "idSupermercados=" + idSupermercados + ", nombre=" + nombre + ", direccion=" + direccion + ", comentariosList=" + comentariosList + ", productosList=" + productosList + '}';
     }
+
+
 
 }

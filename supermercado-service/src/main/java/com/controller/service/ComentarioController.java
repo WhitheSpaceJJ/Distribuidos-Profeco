@@ -3,7 +3,9 @@ package com.controller.service;
 import colas.supermercados.ComentarioCola;
 import colas.supermercados.SuperMercadoCola;
 import com.supermercado.service.servicio.IServicioIntegracion;
-import entidades.oficial.*;
+import entidades.oficial.Comentarios;
+import entidades.oficial.Supermercados;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -158,21 +160,21 @@ public class ComentarioController {
 
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Comentarios> obtenerComentarioPorId(@PathVariable int id) {
-        Comentarios consumidorOptional = null;
-        try {
-            ComentarioCola consumidorCola = new ComentarioCola();
-            consumidorOptional = consumidorCola.obtenerID(id);
-        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
-            return ResponseEntity.unprocessableEntity().build();
-        }
-
-        if (consumidorOptional == null) {
-            return ResponseEntity.unprocessableEntity().build();
-        } else {
-            return ResponseEntity.ok(consumidorOptional);
-        }
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Comentarios> obtenerComentarioPorId(@PathVariable int id) {
+//        Comentarios consumidorOptional = null;
+//        try {
+//            ComentarioCola consumidorCola = new ComentarioCola();
+//            consumidorOptional = consumidorCola.obtenerID(id);
+//        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
+//            return ResponseEntity.unprocessableEntity().build();
+//        }
+//
+//        if (consumidorOptional == null) {
+//            return ResponseEntity.unprocessableEntity().build();
+//        } else {
+//            return ResponseEntity.ok(consumidorOptional);
+//        }
+//    }
 
 }

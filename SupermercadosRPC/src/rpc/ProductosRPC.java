@@ -4,8 +4,10 @@
  */
 package rpc;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -134,11 +136,15 @@ public class ProductosRPC implements Runnable {
                         Productos obtener = null;
                         try {
                             obtener = consumidorServicio.obtenerProductosPorId(peticion4);
+                            obtener.getSupermercadoId().setComentariosList(null);
+                            obtener.getSupermercadoId().setProductosList(null);
                         } catch (Exception e) {
                         }
                         String jsonString = null;
                         try {
                             ObjectMapper mapper = new ObjectMapper();
+                            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
                             jsonString = mapper.writeValueAsString(obtener);
                         } catch (Exception e) {
                         }
@@ -153,31 +159,30 @@ public class ProductosRPC implements Runnable {
                             List< Productos> lista = consumidorServicio.listarTodasLasProductos();
                             listar = new Productos[lista.size()];
                             for (int i = 0; i < listar.length; i++) {
+                                lista.get(i).getSupermercadoId().setComentariosList(null);
+                                lista.get(i).getSupermercadoId().setProductosList(null);
                                 listar[i] = lista.get(i);
                             }
                         } catch (Exception e) {
                         }
-                    
+
                         ObjectMapper mapper = new ObjectMapper();
-                        StringBuilder jsonBuilder = new StringBuilder();
-                        for (Productos elemento : listar) {
-                            try {
-                                String elementoJson = mapper.writeValueAsString(elemento);
-                                jsonBuilder.append(elementoJson);
+//                        StringBuilder jsonBuilder = new StringBuilder();
+//                        for (Productos elemento : listar) {
+//                            String elementoJson = mapper.writeValueAsString(elemento);
+//                            jsonBuilder.append(elementoJson);
+//                            jsonBuilder.append(",");
+//                        }
+//                        if (jsonBuilder.length() > 0) {
+//                            jsonBuilder.setLength(jsonBuilder.length() - 1);
+//                        }
+//                        jsonBuilder.insert(0, "[");
+//                        jsonBuilder.append("]");
+//                        String jsonString3 = jsonBuilder.toString();
+                        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-                                jsonBuilder.append(",");
-                            } catch (JsonProcessingException e) {
-                                System.out.println("Error al convertir el elemento a JSON: " + e.getMessage());
-                            }
-                        }
-                        if (jsonBuilder.length() > 0) {
-                            jsonBuilder.setLength(jsonBuilder.length() - 1);
-                        }
-                        jsonBuilder.insert(0, "[");
-                        jsonBuilder.append("]");
-                        String jsonString3 = jsonBuilder.toString();
-
-                        System.out.println(jsonString3);
+                        String jsonString3 = mapper.writeValueAsString(listar);
+//                        System.out.println(jsonString3);
                         oos.writeObject(jsonString3);
                         byte[] bytes5 = bos.toByteArray();
                         channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, bytes5);

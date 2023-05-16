@@ -1,6 +1,6 @@
 
 package com.supermercado.service.servicio;
-import entidades.oficial.*;
+import entidades.oficial.Consumidores;
 import java.util.List;
 
 

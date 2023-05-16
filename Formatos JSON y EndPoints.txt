@@ -1,0 +1,155 @@
+------------------------------------------------------------
+Supermercado Service
+
+supermercado
+GET
+http://localhost:8060/supermercado
+
+POST
+http://localhost:8060/supermercado 
+{
+    "nombre": "Don José",
+    "direccion": "Primero de Mayo"
+}
+PUT
+http://localhost:8060/supermercado/{idSupermercado}
+{
+    "nombre": "Abarrotes Actualizado",
+    "direccion": "Las Fuentes"
+}
+
+DELETE
+http://localhost:8060/supermercado/{idSupermercado}
+------------------------------------------------------------
+producto
+GET
+http://localhost:8060/supermercado/producto
+
+POST
+http://localhost:8060/supermercado/producto
+ {
+    "nombre": "AAAAAAAA",
+    "marca": "AAAAAAA",
+    "precio": 15.0,
+    "stock": 150,
+    "supermercadoId":{
+        "idSupermercados": 10
+    }
+}
+
+PUT
+http://localhost:8060/supermercado/producto/{idProducto}
+{
+    "nombre": "BBBBBBBBBB",
+    "marca": "BBBBBBBBB",
+    "precio": 15222.0,
+    "stock": 150222,
+    "supermercadoId":{
+        "idSupermercados": 10
+    }
+}
+
+DELETE
+http://localhost:8060/supermercado/producto/{idProducto}
+------------------------------------------------------------
+comentarios
+GET
+http://localhost:8060/supermercado/comentario
+
+POST
+http://localhost:8060/supermercado/comentario
+{
+    "consumidorId": 2,
+    "mensaje": "comentario nuevo",
+    "supermercadoId": {
+        "idSupermercados": 9
+    }
+}
+
+PUT
+http://localhost:8060/supermercado/comentario/{idComentario}
+{
+    "consumidorId": 2,
+    "mensaje": "comentario nuevo actualizado",
+    "supermercadoId": {
+        "idSupermercados": 9
+    }
+}
+
+DELETE
+http://localhost:8060/supermercado/comentario/{idComentario}
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+Consumidores Service
+
+consumidor
+GET
+http://localhost:8060/consumidor
+
+POST
+http://localhost:8060/consumidor
+{
+    "nombre":"nuevo consumidor",
+    "contraseña":"contraseña nueva",
+    "email":"email nuevo",
+    "edad":15
+}
+
+PUT
+http://localhost:8060/consumidor/{idConsumidor}
+{
+    "nombre":"nuevo actualizado",
+    "contraseña":"contraseña actualizado",
+    "email":"email actualizado",
+    "edad":10
+}
+
+DELETE
+http://localhost:8060/consumidor/{idConsumidor}
+------------------------------------------------------------
+wishlist
+GET
+http://localhost:8060/consumidor/wishlist
+
+POST
+http://localhost:8060/consumidor/wishlist
+{
+    "deseo":"Quiero carros en walmart",
+    "supermercadoId":10,
+    "consumidorId":{
+        "idConsumidores":2
+    }
+}
+
+PUT
+http://localhost:8060/consumidor/wishlist/{idWishlist}
+{
+    "deseo":"deseo actualizado",
+    "supermercadoId":10,
+    "consumidorId":{
+        "idConsumidores":2
+    }
+}
+
+DELETE
+http://localhost:8060/consumidor/wishlist/{idWishlist}
+------------------------------------------------------------
+supermercados favoritos
+GET
+http://localhost:8060/consumidor/spfavorito
+
+POST
+http://localhost:8060/consumidor/spfavorito
+{
+    "supermercadoId":11,
+    "consumidorId":{
+        "idConsumidores":2
+    }
+}
+
+DELETE
+http://localhost:8060/consumidor/spfavorito/{idSpFavorito}
+------------------------------------------------------------
+

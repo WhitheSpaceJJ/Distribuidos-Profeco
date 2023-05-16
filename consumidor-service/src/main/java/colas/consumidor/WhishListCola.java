@@ -4,6 +4,8 @@
  */
 package colas.consumidor;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import entidades.oficial.Wishlist;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
@@ -47,12 +49,11 @@ public class WhishListCola implements AutoCloseable {
                 .replyTo(replyQueueName)
                 .headers(Collections.singletonMap("clave", "guardar"))
                 .build();
-
-      String jsonString2 = null;
+  String jsonString2 = null;
         try {
-//            ObjectMapper mapper = new ObjectMapper();
-//            jsonString2 = mapper.writeValueAsString(message);
-            jsonString2 = new Gson().toJson(message);
+            ObjectMapper mapper = new ObjectMapper();
+            jsonString2 = mapper.writeValueAsString(message);
+//            jsonString2 = new Gson().toJson(message);
 
         } catch (Exception e) {
         }
@@ -94,11 +95,11 @@ public class WhishListCola implements AutoCloseable {
                 .replyTo(replyQueueName)
                 .headers(Collections.singletonMap("clave", "actualizar"))
                 .build();
-    String jsonString2 = null;
+  String jsonString2 = null;
         try {
-//            ObjectMapper mapper = new ObjectMapper();
-//            jsonString2 = mapper.writeValueAsString(message);
-            jsonString2 = new Gson().toJson(message);
+            ObjectMapper mapper = new ObjectMapper();
+            jsonString2 = mapper.writeValueAsString(message);
+//            jsonString2 = new Gson().toJson(message);
 
         } catch (Exception e) {
         }
@@ -196,13 +197,17 @@ public class WhishListCola implements AutoCloseable {
                 String response2 = null;
                 Wishlist objeto = null;
                 try {
-                    response2 = (String) ois.readObject();
+               String response24 = (String) ois.readObject();
+                    System.out.println(response24);
+                    response2 = response24;
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("Error; " + ex.getMessage());
                 }
                 if (response2 != null) {
                     try {
                         ObjectMapper mapper = new ObjectMapper();
+                                                    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
                         objeto = mapper.readValue(response2, Wishlist.class);
                     } catch (Exception e) {
                         System.out.println("Error; " + e.getMessage());
@@ -244,13 +249,17 @@ public class WhishListCola implements AutoCloseable {
                 String response2 = null;
                 Wishlist[] objeto = null;
                 try {
-                    response2 = (String) ois.readObject();
+                     String response24 = (String) ois.readObject();
+                    System.out.println(response24);
+                    response2 = response24;
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("Error; " + ex.getMessage());
                 }
                 if (response2 != null) {
                     try {
                         ObjectMapper mapper = new ObjectMapper();
+                                                    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
                         objeto = mapper.readValue(response2, Wishlist[].class);
                     } catch (Exception e) {
                         System.out.println("Error; " + e.getMessage());

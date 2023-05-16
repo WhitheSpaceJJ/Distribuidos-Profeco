@@ -4,6 +4,8 @@
  */
 package colas.consumidor;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import entidades.oficial.Consumidores;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.ConnectionFactory;
 import entidades.oficial.*;
@@ -49,9 +51,9 @@ public class ConsumidorCola implements AutoCloseable {
                 .build();
         String jsonString2 = null;
         try {
-//            ObjectMapper mapper = new ObjectMapper();
-//            jsonString2 = mapper.writeValueAsString(message);
-            jsonString2 = new Gson().toJson(message);
+            ObjectMapper mapper = new ObjectMapper();
+            jsonString2 = mapper.writeValueAsString(message);
+//            jsonString2 = new Gson().toJson(message);
 
         } catch (Exception e) {
         }
@@ -93,11 +95,11 @@ public class ConsumidorCola implements AutoCloseable {
                 .replyTo(replyQueueName)
                 .headers(Collections.singletonMap("clave", "actualizar"))
                 .build();
-        String jsonString2 = null;
+     String jsonString2 = null;
         try {
-//            ObjectMapper mapper = new ObjectMapper();
-//            jsonString2 = mapper.writeValueAsString(message);
-            jsonString2 = new Gson().toJson(message);
+            ObjectMapper mapper = new ObjectMapper();
+            jsonString2 = mapper.writeValueAsString(message);
+//            jsonString2 = new Gson().toJson(message);
 
         } catch (Exception e) {
         }
@@ -195,13 +197,17 @@ public class ConsumidorCola implements AutoCloseable {
                 String response2 = null;
                 Consumidores objeto = null;
                 try {
-                    response2 = (String) ois.readObject();
+                    String response24 = (String) ois.readObject();
+                    System.out.println(response24);
+                    response2 = response24;
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("Error; " + ex.getMessage());
                 }
                 if (response2 != null) {
                     try {
                         ObjectMapper mapper = new ObjectMapper();
+                                                    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
                         objeto = mapper.readValue(response2, Consumidores.class);
                     } catch (Exception e) {
                         System.out.println("Error; " + e.getMessage());
@@ -243,13 +249,17 @@ public class ConsumidorCola implements AutoCloseable {
                 String response2 = null;
                 Consumidores[] objeto = null;
                 try {
-                    response2 = (String) ois.readObject();
+                      String response24 = (String) ois.readObject();
+                    System.out.println(response24);
+                    response2 = response24;
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("Error; " + ex.getMessage());
                 }
                 if (response2 != null) {
                     try {
                         ObjectMapper mapper = new ObjectMapper();
+                                                    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
                         objeto = mapper.readValue(response2, Consumidores[].class);
                     } catch (Exception e) {
                         System.out.println("Error; " + e.getMessage());

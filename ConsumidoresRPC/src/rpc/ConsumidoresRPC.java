@@ -4,8 +4,10 @@
  */
 package rpc;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mysql.cj.protocol.Warning;
 import datos.ConsumidorServicio;
 import datosinterfaces.IConsumidorServicio;
 import entidades_consumidor.Consumidores;
@@ -14,6 +16,8 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
+import entidades_consumidor.Supermercadosfavoritos;
+import entidades_consumidor.Wishlist;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
@@ -127,11 +131,24 @@ public class ConsumidoresRPC implements Runnable {
                         Consumidores obtener = null;
                         try {
                             obtener = consumidorServicio.obtenerConsumidorPorId(peticion45);
+                            List<Wishlist> listaW = obtener.getWishlistList();
+                            List<Supermercadosfavoritos> listaS = obtener.getSupermercadosfavoritosList();
+                            for (int i = 0; i < listaS.size(); i++) {
+                                Supermercadosfavoritos get = listaS.get(i);
+                                get.setConsumidorId(null);
+                            }
+                            for (int i = 0; i < listaW.size(); i++) {
+                                Wishlist get = listaW.get(i);
+                                get.setConsumidorId(null);
+                            }
+                            obtener.setSupermercadosfavoritosList(listaS);
+                            obtener.setWishlistList(listaW);
                         } catch (Exception e) {
                         }
                         String jsonString = null;
                         try {
                             ObjectMapper mapper = new ObjectMapper();
+                            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
                             jsonString = mapper.writeValueAsString(obtener);
                         } catch (Exception e) {
                         }
@@ -153,7 +170,21 @@ public class ConsumidoresRPC implements Runnable {
                         ObjectMapper mapper = new ObjectMapper();
                         StringBuilder jsonBuilder = new StringBuilder();
                         for (Consumidores elemento : listar) {
+                            List<Wishlist> listaW = elemento.getWishlistList();
+                            List<Supermercadosfavoritos> listaS = elemento.getSupermercadosfavoritosList();
+                            for (int i = 0; i < listaS.size(); i++) {
+                                Supermercadosfavoritos get = listaS.get(i);
+                                get.setConsumidorId(null);
+                            }
+                            for (int i = 0; i < listaW.size(); i++) {
+                                Wishlist get = listaW.get(i);
+                                get.setConsumidorId(null);
+                            }
+                            elemento.setSupermercadosfavoritosList(listaS);
+                            elemento.setWishlistList(listaW);
                             try {
+                                                            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
                                 String elementoJson = mapper.writeValueAsString(elemento);
                                 jsonBuilder.append(elementoJson);
 

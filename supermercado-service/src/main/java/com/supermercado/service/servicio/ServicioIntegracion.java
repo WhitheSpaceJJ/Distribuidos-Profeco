@@ -1,5 +1,5 @@
 package com.supermercado.service.servicio;
-import entidades.oficial.*;
+import entidades.oficial.Consumidores;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

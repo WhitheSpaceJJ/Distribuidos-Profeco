@@ -2,6 +2,11 @@
 package entidades.oficial;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -38,7 +43,7 @@ public class Productos implements Serializable {
     private int stock;
     @JoinColumn(name = "supermercado_id", referencedColumnName = "id_supermercados", nullable = false)
     @ManyToOne(optional = false)
-    @JsonBackReference
+   // @JsonManagedReference
     private Supermercados supermercadoId;
 
     public Productos() {
@@ -126,9 +131,8 @@ public class Productos implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades_supermercados.Productos[ idProductos=" + idProductos + " ]";
+        return "Productos{" + "idProductos=" + idProductos + ", nombre=" + nombre + ", marca=" + marca + ", precio=" + precio + ", stock=" + stock + ", supermercadoId=" + supermercadoId + '}';
     }
 
-    
 
 }
