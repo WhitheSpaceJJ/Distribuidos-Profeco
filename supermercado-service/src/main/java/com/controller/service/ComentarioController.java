@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/supermercado/comentario")
-public class ComentarioController {
+public class ComentarioController  {
 
     @Autowired
     private IServicioIntegracion servicioIntegracion;
