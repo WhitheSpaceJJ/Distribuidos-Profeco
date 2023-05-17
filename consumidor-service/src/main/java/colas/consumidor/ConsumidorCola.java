@@ -28,6 +28,12 @@ import com.google.gson.Gson;
  */
 public class ConsumidorCola implements AutoCloseable {
 
+        private static final String RPC_QUEUE_GUARDAR = "rpc_queue_guardar";
+    private static final String RPC_QUEUE_ACTUALIZAR = "rpc_queue_actualizar";
+    private static final String RPC_QUEUE_ELIMINAR = "rpc_queue_eliminar";
+    private static final String RPC_QUEUE_OBTENER = "rpc_queue_obtener";
+    private static final String RPC_QUEUE_LISTAR = "rpc_queue_listar";
+    
     private com.rabbitmq.client.Connection connection;
     private com.rabbitmq.client.Channel channel;
     private String requestQueueName = "rpc_queue_consumidor";
@@ -43,11 +49,11 @@ public class ConsumidorCola implements AutoCloseable {
     public boolean guardar(Consumidores message) throws IOException, InterruptedException, ExecutionException {
         final String corrId = UUID.randomUUID().toString();
 
-        String replyQueueName = channel.queueDeclare().getQueue();
+        String replyQueueName = RPC_QUEUE_GUARDAR;
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                .headers(Collections.singletonMap("clave", "guardar"))
+//                .headers(Collections.singletonMap("clave", "guardar"))
                 .build();
         String jsonString2 = null;
         try {
@@ -62,7 +68,7 @@ public class ConsumidorCola implements AutoCloseable {
         oos.writeObject(jsonString2);
         byte[] bytes = bos.toByteArray();
 
-        channel.basicPublish("", requestQueueName, props, bytes);
+        channel.basicPublish("", RPC_QUEUE_GUARDAR, props, bytes);
 
         final CompletableFuture<Boolean> response = new CompletableFuture<>();
 
@@ -89,11 +95,11 @@ public class ConsumidorCola implements AutoCloseable {
     public boolean actualizar(Consumidores message) throws IOException, InterruptedException, ExecutionException {
         final String corrId = UUID.randomUUID().toString();
 
-        String replyQueueName = channel.queueDeclare().getQueue();
+        String replyQueueName = RPC_QUEUE_ACTUALIZAR;
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                .headers(Collections.singletonMap("clave", "actualizar"))
+//                .headers(Collections.singletonMap("clave", "actualizar"))
                 .build();
      String jsonString2 = null;
         try {
@@ -108,7 +114,7 @@ public class ConsumidorCola implements AutoCloseable {
         oos.writeObject(jsonString2);
         byte[] bytes = bos.toByteArray();
 
-        channel.basicPublish("", requestQueueName, props, bytes);
+        channel.basicPublish("", RPC_QUEUE_ACTUALIZAR, props, bytes);
 
         final CompletableFuture<Boolean> response = new CompletableFuture<>();
 
@@ -135,11 +141,11 @@ public class ConsumidorCola implements AutoCloseable {
     public boolean eliminar(int id) throws IOException, InterruptedException, ExecutionException {
         final String corrId = UUID.randomUUID().toString();
 
-        String replyQueueName = channel.queueDeclare().getQueue();
+        String replyQueueName = RPC_QUEUE_ELIMINAR;
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                .headers(Collections.singletonMap("clave", "eliminar"))
+//                .headers(Collections.singletonMap("clave", "eliminar"))
                 .build();
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -147,7 +153,7 @@ public class ConsumidorCola implements AutoCloseable {
         oos.writeObject(id);
         byte[] bytes = bos.toByteArray();
 
-        channel.basicPublish("", requestQueueName, props, bytes);
+        channel.basicPublish("", RPC_QUEUE_ELIMINAR, props, bytes);
 
         final CompletableFuture<Boolean> response = new CompletableFuture<>();
 
@@ -174,11 +180,11 @@ public class ConsumidorCola implements AutoCloseable {
     public Consumidores obtenerID(int id) throws IOException, InterruptedException, ExecutionException {
         final String corrId = UUID.randomUUID().toString();
 
-        String replyQueueName = channel.queueDeclare().getQueue();
+        String replyQueueName = RPC_QUEUE_OBTENER;
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                .headers(Collections.singletonMap("clave", "obtener"))
+//                .headers(Collections.singletonMap("clave", "obtener"))
                 .build();
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -186,7 +192,7 @@ public class ConsumidorCola implements AutoCloseable {
         oos.writeObject(id);
         byte[] bytes = bos.toByteArray();
 
-        channel.basicPublish("", requestQueueName, props, bytes);
+        channel.basicPublish("", RPC_QUEUE_OBTENER, props, bytes);
 
         final CompletableFuture<Consumidores> response = new CompletableFuture<>();
 
@@ -226,11 +232,11 @@ public class ConsumidorCola implements AutoCloseable {
     public Consumidores[] listar() throws IOException, InterruptedException, ExecutionException {
         final String corrId = UUID.randomUUID().toString();
 
-        String replyQueueName = channel.queueDeclare().getQueue();
+        String replyQueueName = RPC_QUEUE_LISTAR;
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
                 .replyTo(replyQueueName)
-                .headers(Collections.singletonMap("clave", "listar"))
+//                .headers(Collections.singletonMap("clave", "listar"))
                 .build();
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -238,7 +244,7 @@ public class ConsumidorCola implements AutoCloseable {
         oos.writeObject("listar");
         byte[] bytes = bos.toByteArray();
 
-        channel.basicPublish("", requestQueueName, props, bytes);
+        channel.basicPublish("", RPC_QUEUE_LISTAR, props, bytes);
 
         final CompletableFuture<Consumidores[]> response = new CompletableFuture<>();
 
