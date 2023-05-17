@@ -1,0 +1,35 @@
+version: '3'
+services:
+    mysql-server1:
+        image: mysql:8.0.17
+        container_name: proyecto-mysql-consumidores
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: bd_consumidores
+        ports:
+            - 3310:3306
+        networks:
+            - my-network
+
+    mysql-server2:
+        image: mysql:8.0.17
+        container_name: proyecto-mysql-supermercados
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: bd_supermercados
+        ports:
+            - 3309:3306
+        networks:
+            - my-network
+
+    api-gateway:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - 8060:8060
+        networks:
+            - my-network
+
+networks:
+    my-network:

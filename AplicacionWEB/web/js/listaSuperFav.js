@@ -11,17 +11,6 @@ const btnDelete = document.createElement("button");
 
 let supermercados = []
 
-fetch(urlGetSupermercados, {
-  method: 'GET',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-})
-  .then(response => response.json())
-  .then(data => {
-      supermercados = data
-  })
-
 const supermercadoFavorito  = {
     //"id": Math.floor(Math.random() * 1000),
     //"id": id_favoritos
@@ -57,36 +46,45 @@ function getCookie(name) {
 }
 
 function cargarSpFavoritos(){
+  fetch(urlGetSupermercados, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  })
+    .then(response => response.json())
+    .then(data => {
+      supermercados = data
+      const cookieConsumidor = getCookie('cookieConsumidor')
+      const decodedToken = decodeURIComponent(cookieConsumidor);
+      const consumidorObjeto = JSON.parse(decodedToken);
+
+      if (consumidorObjeto.supermercadosfavoritosList == null) {
+        alert("Aún no has agregado supermercados favoritos!")
+        return
+      }
+
+      const misSpFavoritos = consumidorObjeto.supermercadosfavoritosList
+      const tabla = document.querySelector("table tbody");
+
+      misSpFavoritos.forEach(spFavorito => {
+        const row = document.createElement("tr");
+        const nombreSp = supermercados.filter(s => s.idSupermercados === spFavorito.supermercadoId)[0]
+
+        const fila = document.querySelector('tabla-listaSuper');
+        fila.innerHTML = `
+        <td>${nombreSp.nombre}</td>
+      <td>
+        <button data-id="${nombreSp.idSupermercados}" class="btn btn-danger eliminar">Eliminar</button>
+      </td>
+    `;
+
+        tabla.appendChild(fila);
+      });
+    })
   //agregar super favorito
 
-  const cookieConsumidor = getCookie('cookieConsumidor')
-  const decodedToken = decodeURIComponent(cookieConsumidor);
-  const consumidorObjeto = JSON.parse(decodedToken);
-
-  if (consumidorObjeto.supermercadosfavoritosList == null){
-    alert("Aún no has agregado supermercados favoritos!")
-    return
-  }
-
-  const misSpFavoritos = consumidorObjeto.supermercadosfavoritosList
-
-
-  misSpFavoritos.forEach(spFavorito => {
-        const row = document.createElement("tr");
-        const supermercado = spFavorito.filter(objeto => objeto.idSupermercados === data.supermercadoId);
-
-        row.appendChild(document.createElement("td")).textContent = supermercado.nombre;
-
-        //Boton eliminar
-        
-        btnDelete.textContent = "Eliminar";
-        btnDelete.classList.add("btn");
-        btnDelete.classList.add("btn-danger")
-        const tdDelete = document.createElement("td");
-        tdDelete.appendChild(btnDelete);
-        row.appendChild(tdDelete);
-        selectedCommentsTableBody.appendChild(row);
-      });
+  
       
 
 }
