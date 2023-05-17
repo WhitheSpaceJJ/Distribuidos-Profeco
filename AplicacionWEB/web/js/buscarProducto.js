@@ -59,15 +59,22 @@ buscador.addEventListener('input', buscar);
 buscar();
 
 
- ///buscar por RADIO
- function menorAMayor(){
-    const tabla = document.getElementById("tabla-Comentarios");
-
+///buscar por RADIO
+function mayorAMenor() {
     // Ordena los objetos por precio descendente
-    productos.sort((a, b) => b.precio + a.precio);
-
+    productos.sort((a, b) => b.precio - a.precio);
+    const tabla = document.getElementById("tabla-Comentarios");
     tabla.innerHTML = ""; // Limpiar la tabla
     // Agregar las filas de la tabla
     mostrarSupermercados(productos);
-     
- }
+
+}
+
+function menorAMayor() {
+    // Ordena los objetos por precio descendente
+    productos.sort((a, b) => a.precio - b.precio);
+    const tabla = document.getElementById("tabla-Comentarios");
+    tabla.innerHTML = ""; // Limpiar la tabla
+    // Agregar las filas de la tabla
+    mostrarSupermercados(productos);
+}

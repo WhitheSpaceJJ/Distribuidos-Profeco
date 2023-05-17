@@ -17,6 +17,7 @@ public class CorsConfig {
         corsConfig.setAllowCredentials(true);
         List<String> origenes=new ArrayList<>();
         origenes.add("http://127.0.0.1:5501");
+        origenes.add("http://127.0.0.1:5500");
         origenes.add("http://localhost:8080");
         corsConfig.setAllowedOrigins(origenes); // Establece solo un origen permitido
         corsConfig.addAllowedHeader("*");
