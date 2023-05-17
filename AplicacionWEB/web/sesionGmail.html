@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gmail</title>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <meta name="google-signin-client_id" content="629012416934-n2cn5st338gcv6grp6od0rovk7amudhb.apps.googleusercontent.com">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/styles.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js%22%3E"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js%22%3E"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js%22%3E"></script>
+</head>
+<body>
+
+<nav>
+    <input type="checkbox" id="check">
+    <label for="check" class="checktbn">
+        <i class="fas fa-bars"></i>
+    </label>
+    <a href="index.html" class="enlace">
+        <img src="../img/p3.png" alt="" class="logo"/>
+    </a>
+</nav>
+
+<div class="contenedorGoogle">
+    <h2 style="margin-top: 5px;" >Inicio de sesión</h2>
+    <form id="login-form" style="margin-top: 15px;">
+
+        <div style="display: flex; justify-content: center; margin-top: 30px; margin-bottom: 30px;" class="g-signin2"   data-onsuccess="onSignIn"></div>
+        <a style="margin-bottom: 10px; text-decoration: underline;" href="index.html" onclick="signOut();">Regresar</a>
+    <script src="/js/sesionGmail.js"></script>
+    </form>
+</div>
+
+
+
+<!--
+<h1> INCIAR SESIÓN</h1>
+<div class="g-signin2" data-onsuccess="onSignIn"></div>
+<script src="../js/login.js"></script>-->
+
+</body>
+<footer class="footer">
+    <nav>
+        <a href="#" class="enlace"><img src="../img/logo4.png" alt="" class="logo2"/></a>
+        <a id="info">Contáctanos</a>
+        <a id="info2">Av. José Vasconcelos 208 Col. Condesa, Demarcación Territorial Cuauhtémoc 06140 Ciudad de México</a>
+        <a id="info3">Teléfono: (55) 5625 6700</a>
+        <a id="info4">Atención Ciudadana: 800 468 8722</a>
+    </nav>
+</footer>
+</html>

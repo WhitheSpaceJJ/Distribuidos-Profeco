@@ -1,0 +1,185 @@
+.enlace {
+    position: absolute;
+    padding: 20px 50px;
+}
+
+.logo {
+    height: 40px;
+}
+
+.logo2 {
+    width: 200px;
+    height: 60px;
+}
+
+
+.container{
+    
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+#nav2 {
+    background: #0c231e;
+    height: 80px;
+    width: 100%;
+}
+
+
+.footer {
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    height: 100px;
+    width: 100%;
+    background: #13322b;
+}
+
+
+#info {
+    top: 4px;
+    position: relative;
+    padding-left: 280px;
+    font-family: 'Lucida Sans';
+    color: aliceblue;
+    
+}
+
+#info2 {
+    top: 22px;
+    right: 102px;
+    position: relative;
+    font-family: 'Lucida Sans';
+    color: aliceblue;
+}
+#info3 {
+    top: 42px;
+    right: 905px;
+    position: relative;
+    font-family: 'Lucida Sans';
+    color: aliceblue;
+}
+#info4 {
+    top: 62px;
+    right: 1109px;
+    position: relative;
+    font-family: 'Lucida Sans';
+    color: aliceblue;
+}
+
+#initProfecoimg{
+    margin-top: 50px;
+    width: 70%;
+    height: 170px;
+}
+
+.opcionesPROFECO{
+    margin-left:20px;
+    margin-right:20px;
+}
+
+.contenedorImg{
+    align-items: center;
+    margin-right: 150px;
+    display: flex;
+    margin-top: 70px;
+}
+
+.contenedorActualizar{
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-left: 130px;
+    align-items: center;
+}
+
+.botonActualizar {
+    display: block;
+    padding: 0.5rem 1rem;
+    width: 200px;
+    margin: 0 auto;
+    background-color: rgb(43, 234, 43);
+}
+
+.buscador{
+    background-color: dimgray;
+    width: 350px;
+}
+
+.contenedorBuscador{
+    align-items: left;
+    margin-right: 150px;
+    display: flex;
+    margin-top: 70px;
+}
+
+.contenedorAgregar{
+    display: block;
+    padding: 0.5rem 1rem;
+    text-align: center;
+}
+
+.contenedorInconsistencia{
+    margin-top: 30px;
+    text-align: center;
+}
+
+.contenedorDescripcionInconsistencia{
+    margin-left: 650px;
+    margin-right: 200px;
+    text-align: left;
+}
+
+#etiquetaReportar{
+    margin-top: 10px;
+    color: red;
+}
+
+.etiquetaAgregarWishlist{
+    margin-top: 10px;
+    color: rgb(0, 115, 255);
+    text-decoration: underline;
+}
+
+.contenedorDetalle{
+    display: flex;
+    align-items: center;
+    margin-top: 40px;
+    margin-left: 30px;
+}
+
+.contenedorDescripcion{
+    text-align: left;
+    
+}
+
+.contenedorGoogle{
+    display: block;
+    text-align: center;
+    border-style: solid;
+    margin-top: 100px;
+    margin-left: 550px;
+    margin-right: 550px;
+    padding-bottom: 70px;
+    padding-top: 50px;
+}
+
+.contenedorWishlist{
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+.botonAgregarOferta{
+    margin-top: 30px;
+    margin-bottom: 20px;
+    display: flex; 
+    justify-content: right;
+
+}
+
+#espacio-en-blanco {
+    height: 600px;
+}
+

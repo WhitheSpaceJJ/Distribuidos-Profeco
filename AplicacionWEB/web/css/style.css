@@ -1,0 +1,361 @@
+*{
+    padding: 0;
+    margin:0;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+}
+nav{
+    background: #0c231e;
+    height: 80px;
+    width: 100%;
+}
+/** INDEX*/
+.checkbtn{
+    font-size: 30px;
+    color: aquamarine;
+    float: right;
+    line-height: 80px;
+    margin-right: 40px;
+    cursor: pointer;
+    display: none;
+}
+#check{
+    display: none;
+}
+.enlace{
+    position: absolute;
+    padding: 20px 50px;
+}
+
+@media (max-width: 952px){
+    .enlace{
+        padding-left: 20px;
+    }
+    nav ul li a{
+        font-size: 16px;
+    }
+}
+
+
+@media (max-width: 858px){
+    .checkbtn1{
+        display: block;
+    }
+    ul{
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        background: blueviolet;
+        top: 80px;
+        left: -100%;
+        text-align: center;
+        transition: all .5s;
+    }
+    nav ul li{
+        display: block;
+        margin: 50px 0;
+        line-height: 30px;
+    }
+    nav ul li a{
+        font-size: 20px;
+    }
+    li a:hover, li a.activo{
+        background: none;
+        color: red;
+    }
+    #check:checked ~ ul{
+        left: 0;
+    }
+}
+
+.contenedorImg{
+     display: flex;
+     margin-top: 20px;
+}
+.i1{
+    width:300px;
+    margin-left:20px;
+    margin-right:20px;
+
+}
+.a1{
+    text-align:center;
+    text-justify: auto;
+     margin-left:150px;
+     font: bold 18px/21px Helvetica, Arial, sans-serif;
+    color:black;
+}
+.a2{
+    text-align:justify;
+    text-justify: auto;
+     margin-left:50px;
+     font: bold 18px/21px Helvetica, Arial, sans-serif;
+    color:black;
+}
+.a3{
+    text-align:justify;
+    text-justify: auto;
+     margin-left:40px;
+     font: bold 18px/21px Helvetica, Arial, sans-serif;
+    color:black;
+}
+.a4{
+    text-align:justify;
+    text-justify: auto;
+     margin-left:50px;
+     font: bold 15px/18px Helvetica, Arial, sans-serif;
+    color:black;
+}
+
+.a5{
+    text-align:justify;
+    text-justify: auto;
+     margin-left:20px;
+     margin-right: 20px;
+     font: bold 18px/21px Helvetica, Arial, sans-serif;
+    color:black;
+}
+
+nav ul{
+    float: right;
+    margin-right: 20px;
+}
+nav ul li{
+    display: inline-block;
+    line-height: 80px;
+    margin: 0 5px;
+}
+nav ul li a{
+    color: #FFFFFF;
+    font-size: 18px;
+    padding: 7px 13px;
+     border-radius: 3px;
+     text-transform: uppercase;
+}
+li a.activo, li a:hover{
+    background: #4E9B8A;
+    transition: .5s;
+}
+
+
+  /** skkd*/
+
+
+
+.contenedora2{
+    display: flex;
+     margin-top: 20px;
+}
+.contenedorBTN{
+    display: flex;
+         margin-top: 20px;
+}
+.btn{
+    text-decoration:none;
+    border-radius:3px;
+    padding: 20px 15px;
+    display: inline-block;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.3);
+    margin-left:220px;
+    margin-right:50px;
+}
+.btn-b2{
+    color:black;
+    background: #245248;
+
+}
+.btn-b2:hover{
+    background: #69ABA6;
+}
+.btn-b2:active{
+    background: #72BBB5;
+}
+
+
+
+.r1{
+    width:300px;
+    margin-left:80px;
+    margin-right:50px;
+
+}
+
+.i5{
+    width:350px;
+    margin-left:20px;
+    margin-right:20px;
+
+}
+.lineaH{
+    margin-top:5px
+}
+.contenedorSesion{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+
+
+}
+input{
+    outline: 0;
+    background:#E3DFD6;
+    width: 100%;
+    border:0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size:14px;
+}
+/** REGISTROO*/
+.boton{
+    font-family: sans-serif;
+    text-transform: uppercase;
+    outline:0;
+    background: #245248;
+    width: 100%;
+    border:0;
+    padding: 15px;
+    color: black;
+    font-size:14px;
+    -webkit-transition: all 0.3 ease;
+    transition: all 0.3 ease;
+    cursor: pointer
+}
+.boton:hover{
+    background: #D7D3D3;
+}
+.boton:active{
+    background: #E5E1E1;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index:1;
+    background:#9D9B96;
+    max-width:360px;
+    padding: 45px;
+    text-align:center;
+    box-shadow: 0 0 20px 0 rgba(0,0,0,0.2), 0 5px 5px 0 rgba(0,0,0,0.2);
+}
+.r2{
+    text-align:center;
+    text-justify: auto;
+     margin-left:150px;
+     font: bold 20px/45px Helvetica, Arial, sans-serif;
+    color:black;
+}
+
+.R1{
+    text-align:center;
+    text-justify: auto;
+     margin-left:550px;
+     font: bold 25px/30px Helvetica, Arial, sans-serif;
+    color:black;
+}
+.logo{
+    height: 40px;
+}
+
+section{
+
+}
+
+/* tabla */
+.ls1{
+    text-align:center;
+        text-justify: auto;
+         margin-left:150px;
+         font: bold 20px/45px Helvetica, Arial, sans-serif;
+        color:black;
+        margin-top: 15px;
+}
+
+.contenedorListaSuper{
+    border: solid 0 rgba(38, 156, 35);
+     margin: 40px auto;
+     width: 250px;
+}
+table{
+    align:center;
+    color: #fff;
+    font-size: 14px;
+    color:black;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+thead{
+    background: rgba(20, 155, 17);
+}
+th{
+    padding:20px 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+td{
+    padding: 15px;
+    border-button: soild 1px rgba(9, 163, 5 )
+}
+tbody tr{
+    cursor: pointer;
+}
+tbody tr:hover{
+    background: rgba(48, 237, 43 )
+}
+/** BUSCAR SUPERMERCADO*/
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  
+}
+
+h1 {
+  margin-top: 50px;
+}
+
+#search-form {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+#search-input {
+  padding: 10px;
+  font-size: 16px;
+  width: 60%;
+  border-radius: 5px 0 0 5px;
+  border: 1px solid #ccc;
+}
+
+#search-input:focus {
+  outline: none;
+}
+
+#search-form button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 0 5px 5px 0;
+}
+
+#results {
+  margin-top: 30px;
+  display: none;
+  text-align: left;
+}
+
+#results p {
+  font-size: 16px;
+  margin-top: 10px;
+}
