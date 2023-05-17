@@ -12,97 +12,97 @@
     </head>
 
 
-<body>
+    <body>
 
-    <nav id="nav2">
-        <a class="enlace">
-            <img src="./img/p3.png" alt="" class="logo" />
-        </a>
-    </nav>
-    
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <div class="container-fluid">
-            <ul class="navbar-nav">
-                <a class="navbar-brand" href="#">
-                    <img src="./img/user.png" alt="Logo" style="width:40px;" class="rounded-pill">
-                </a>
+        <nav id="nav2">
+            <a class="enlace">
+                <img src="./img/p3.png" alt="" class="logo" />
+            </a>
+        </nav>
+
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <div class="container-fluid">
+                <ul class="navbar-nav">
+                    <a class="navbar-brand" href="#">
+                        <img src="./img/user.png" alt="Logo" style="width:40px;" class="rounded-pill">
+                    </a>
 
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Cerrar sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+        <div class="container mt-3">
+            <h2></h2>
+            <p>Apartado donde se muestran los comentarios realizados por el usuario.</p>
+            <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">Cerrar sesión</a>
+                    <a class="nav-link" href="agregarSuperList.html">Buscar Supermercado</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="hacerComentario.html">WishList</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="buscarProducto.html">Buscar producto</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Mis comentarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="listaSuperFav.html">Supermercados Favoritos</a>
                 </li>
             </ul>
-        </div>
-    </nav>
 
-
-    <div class="container mt-3">
-        <h2></h2>
-        <p>Apartado donde se muestran los comentarios realizados por el usuario.</p>
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link" href="agregarSuperList.html">Buscar Supermercado</a>
-            </li>
-        <li class="nav-item">
-            <a class="nav-link" href="hacerComentario.html">WishList</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="buscarProducto.html">Buscar producto</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" href="#">Mis comentarios</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="listaSuperFav.html">Supermercados Favoritos</a>
-        </li>
-    </ul>
-
-    <br>
-    <!--EMPIEZA TABLAAAA-->
+            <br>
+            <!--EMPIEZA TABLAAAA-->
             <h1> Mis Comentarios</h1>
-        <!--INTRODUCIR LA LÓGICA DE LA TABLA AQUÍ-->
+            <!--INTRODUCIR LA LÓGICA DE LA TABLA AQUÍ-->
+            <div class="table-container">
+                <table id="comment-table" class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th>Supermercado</th>
+                            <th>Comentario</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-comentarios"></tbody>
+                </table>
+            </div>
 
-        <table id="comment-table" class="table table-dark table-striped">
-            <thead>
-                <tr>
-                    <th>Supermercado</th>
-                    <th>Comentario</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tabla-comentarios"></tbody>
-        </table>
-    </div>
 
 
-
-    <dialog id="modal">
-        <div>
-            <h2>Editar comentario</h2>
-            <form>
-                <label for="usuario">Supermercado:</label>
-                <input class="form-control" type="text" id="usuario" name="usuario" size="100" required>
-                <br>
-                <label for="comentario" style="display: block; margin-bottom: 1px;">Comentario: </label>
-                <textarea id="comentario"  name="comentario" style="height: 125px; width: 885px; margin-top: 10px; margin-bottom: 2px;" required></textarea>
-                <br>
-                <button type="submit" class="btn btn-success">Guardar cambios</button>
-                <button type="button" class="btn btn-danger" id="cancelar">Cancelar</button>
-            </form>
+            <dialog id="modal">
+                <div>
+                    <h2>Editar comentario</h2>
+                    <form>
+                        <label for="usuario">Supermercado:</label>
+                        <input class="form-control" type="text" id="usuario" name="usuario" size="100" required>
+                        <br>
+                        <label for="comentario" style="display: block; margin-bottom: 1px;">Comentario: </label>
+                        <textarea id="comentario"  name="comentario" style="height: 125px; width: 885px; margin-top: 10px; margin-bottom: 2px;" required></textarea>
+                        <br>
+                        <button type="submit" class="btn btn-success">Guardar cambios</button>
+                        <button type="button" class="btn btn-danger" id="cancelar">Cancelar</button>
+                    </form>
+                </div>
+            </dialog>
         </div>
-    </dialog>
+        <script src="./js/misComentarios.js"></script>
 
-    <script src="./js/misComentarios.js"></script>
-
-</body>
-<footer class="footer">
-    <nav>
-        <a href="#" class="enlace"><img src="./img/logo4.png" alt="" class="logo2" /></a>
-        <a id="info">Contáctanos</a>
-        <a id="info2">Av. José Vasconcelos 208 Col. Condesa, Demarcación Territorial Cuauhtémoc 06140 Ciudad de México</a>
-        <a id="info3">Teléfono: (55) 5625 6700</a>
-        <a id="info4">Atención Ciudadana: 800 468 8722</a>
-    </nav>
-</footer>
+    </body>
+    <footer class="footer">
+        <div class="footer-content">
+            <h3>ProFeCo</h3>
+            <p>Av. José Vasconcelos 208 Col. Condesa, Demarcación Territorial Cuauhtémoc 06140 Ciudad de México</p>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright &copy; 2023 <span>ProFeCo</span></p>
+        </div>
+    </footer>
 
 </html>
