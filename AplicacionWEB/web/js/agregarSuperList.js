@@ -1,7 +1,7 @@
 const URL_API = 'https://jsonplaceholder.typicode.com/comments';
 const buscador = document.getElementById('buscador');
 const tablaSupermercado = document.getElementById('tabla-prductos');
-
+const supermercadoEndpointGET = 'http://localhost:8060/supermercado'
 
 
 //BUSCAA
@@ -9,13 +9,13 @@ const buscar = () => {
   const textoBusqueda = buscador.value.toLowerCase();
 
   // Realizar la solicitud a la API
-  fetch(URL_API)
+  fetch(supermercadoEndpointGET)
     .then(response => response.json())
     .then(supermercados => {
       // Filtrar los supermercado por nombre, precio o super
       const supermercadosFiltrados = supermercados.filter(supermercado => {
         const nombre = supermercado.name.toLowerCase();
-                const id = supermercado.id.toString().toLowerCase();
+                const id = supermercado.idSupermercados.toString().toLowerCase();
                 const email = supermercado.email.toLowerCase();
                 return nombre.includes(textoBusqueda) || id.includes(textoBusqueda) || email.includes(textoBusqueda);
       });
@@ -68,7 +68,7 @@ buscar();
 let selectSupermercados = JSON.parse(localStorage.getItem("selectedComments")) || [];
 
 // rellenar la tabla con supermercado
-fetch('https://jsonplaceholder.typicode.com/comments')
+fetch(supermercadoEndpointGET)
   .then(response => response.json())
   .then(data => {
     const tablaSupermercados = document.getElementById("tabla-Comentarios");
@@ -81,12 +81,12 @@ fetch('https://jsonplaceholder.typicode.com/comments')
       checkbox.name = "comment";
       checkbox.value = JSON.stringify(supermercado);
       // marque la casilla del supermercado(s) fue seleccionado previamente
-      if (selectSupermercados.find(seleccionSuper => seleccionSuper.id === supermercado.id)) {
+      if (selectSupermercados.find(seleccionSuper => seleccionSuper.id === supermercado.idSupermercados)) {
         checkbox.checked = true;
       }
       checkboxCell.appendChild(checkbox);
       row.appendChild(checkboxCell);
-      row.appendChild(document.createElement("td")).textContent = supermercado.name;
+      row.appendChild(document.createElement("td")).textContent = supermercado.nombre;
 
       tablaSupermercados.appendChild(row);
     });

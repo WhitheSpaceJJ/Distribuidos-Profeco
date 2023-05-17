@@ -1,22 +1,26 @@
 const URL_API = 'https://jsonplaceholder.typicode.com/comments';
 const buscador = document.getElementById('buscador');
 const tablaSupermercado = document.getElementById('tabla-prductos');
+const productosGET='http://localhost:8060/supermercado/producto';
+
+let productos = [];
 
 //BUSCAA
 const buscar = () => {
   const textoBusqueda = buscador.value.toLowerCase();
 
   // Realizar la solicitud a la API
-  fetch(URL_API)
+  fetch(productosGET)
     .then(response => response.json())
     .then(supermercados => {
       // Filtrar los comentarios por nombre, precio o super
       const supermercadosFiltrados = supermercados.filter(supermercado => {
-        const nombre = supermercado.name.toLowerCase();
-        const id = supermercado.id.toString().toLowerCase();
-        const email = supermercado.email.toLowerCase();
+        const nombre = supermercado.nombre.toLowerCase();
+        const id = supermercado.precio.toString().toLowerCase();
+        const email = supermercado.supermercadoId.nombre.toLowerCase();
         return nombre.includes(textoBusqueda) || id.includes(textoBusqueda) || email.includes(textoBusqueda);
       });
+        productos = supermercados;
 
       // Mostrar los comentarios en la tabla
       mostrarSupermercados(supermercadosFiltrados);
@@ -36,9 +40,9 @@ const mostrarSupermercados = supermercados => {
     const id = document.createElement('td');
     const email = document.createElement('td');
 
-    nombre.textContent = supermercado.name;
-    id.textContent = supermercado.id;
-    email.textContent = supermercado.email;
+    nombre.textContent = supermercado.nombre;
+    id.textContent = supermercado.precio;
+    email.textContent = supermercado.supermercadoId.nombre;
 
     row.appendChild(nombre);
     row.appendChild(id);
@@ -56,26 +60,14 @@ buscar();
 
 
  ///buscar por RADIO
- function mostrarProductos() {
-   const ordenRadios = document.getElementsByName("orden");
-   let orden = "asc"; // orden por defecto
-   for (let i = 0; i < ordenRadios.length; i++) {
-     if (ordenRadios[i].checked) {
-       orden = ordenRadios[i].value === "ascendente" ? "asc" : "desc";
-     }
-   }
-   fetch(`https://jsonplaceholder.typicode.com/comments?_sort=id&_order=${orden}`)
-     .then(response => response.json())
-     .then(data => {
-       const tabla = document.getElementById("tabla-Comentarios");
-       tabla.innerHTML = ""; // Limpiar la tabla
-       // Agregar las filas de la tabla
-       mostrarSupermercados(data);
+ function menorAMayor(){
+    const tabla = document.getElementById("tabla-Comentarios");
 
-     });
+    // Ordena los objetos por precio descendente
+    productos.sort((a, b) => b.precio + a.precio);
+
+    tabla.innerHTML = ""; // Limpiar la tabla
+    // Agregar las filas de la tabla
+    mostrarSupermercados(productos);
+     
  }
-
-fetch(url)
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error(error));
