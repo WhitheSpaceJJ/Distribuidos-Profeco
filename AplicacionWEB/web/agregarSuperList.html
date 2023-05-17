@@ -71,18 +71,11 @@
 
             <!-- <button onclick="mostrarProductos()" class="btn btn-info">Buscar</button>
                     <button onclick="limpiarSeleccion()" class="btn btn-outline-info">Limpiar</button>-->
-            <table class="table table-dark table-striped" style="margin-top: 20px;" id="tabla-Comentarios">
+            <div class="table-container">
+                <table class="table table-dark table-striped" style="margin-top: 20px;" id="tabla-Comentarios">
 
-                <!--<input type="text" id="buscador" placeholder="Buscar por nombre, precio o supermercado" style="width: 500px;" class="form-control">-->
-                <!--PARA QUE APAREZCA AL PRINCIPIO CUANDO ABRES LA PANTALLA-->
-                <thead>
-                    <tr>
-                        <th>Check</th>
-                        <th>Nombre</th>
-
-                    </tr>
-                </thead>
-                <table class="table table-dark table-striped" style="margin-top: 20px;" id="table">
+                    <!--<input type="text" id="buscador" placeholder="Buscar por nombre, precio o supermercado" style="width: 500px;" class="form-control">-->
+                    <!--PARA QUE APAREZCA AL PRINCIPIO CUANDO ABRES LA PANTALLA-->
                     <thead>
                         <tr>
                             <th>Check</th>
@@ -90,23 +83,32 @@
 
                         </tr>
                     </thead>
-                    <tbody id="tabla-prductos">
-                    </tbody>
+                    <table class="table table-dark table-striped" style="margin-top: 20px;" id="table">
+                        <thead>
+                            <tr>
+                                <th>Check</th>
+                                <th>Nombre</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-prductos">
+                        </tbody>
+                    </table>
                 </table>
-            </table>
+            </div>
         </div>
 
         <script src="./js/agregarSuperList.js"></script>
 
     </body>
     <footer class="footer">
-        <nav>
-            <a href="#" class="enlace"><img src="./img/logo4.png" alt="" class="logo2" /></a>
-            <a id="info">Contáctanos</a>
-            <a id="info2">Av. José Vasconcelos 208 Col. Condesa, Demarcación Territorial Cuauhtémoc 06140 Ciudad de México</a>
-            <a id="info3">Teléfono: (55) 5625 6700</a>
-            <a id="info4">Atención Ciudadana: 800 468 8722</a>
-        </nav>
+        <div class="footer-content">
+            <h3>ProFeCo</h3>
+            <p>Av. José Vasconcelos 208 Col. Condesa, Demarcación Territorial Cuauhtémoc 06140 Ciudad de México</p>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright &copy; 2023 <span>ProFeCo</span></p>
+        </div>
     </footer>
 
 </html>

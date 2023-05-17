@@ -2,73 +2,75 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Supermercado</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Supermercado</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="./css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    </head>
 
-<body>
+    <body>
 
-    <nav id="nav2"> <!-- ////////////////////  HEADER  //////////////////// -->
+        <nav id="nav2"> <!-- ////////////////////  HEADER  //////////////////// -->
 
 
-        <a class="enlace">
-            <img src="./img/p3.png" alt="" class="logo" />
-        </a>
+            <a class="enlace">
+                <img src="./img/p3.png" alt="" class="logo" />
+            </a>
 
-        <a id="con"> Bienvenid@! . .</a>
-    </nav><!-- ////////////////////  HEADER  //////////////////// -->
-    
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <div class="container-fluid">
-            <ul class="navbar-nav">
-                <a class="navbar-brand" href="#">
-                    <img src="./img/user.png" alt="Logo" style="width:40px;" class="rounded-pill">
-                </a>
+            <a id="con"> Bienvenid@! . .</a>
+        </nav><!-- ////////////////////  HEADER  //////////////////// -->
+
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <div class="container-fluid">
+                <ul class="navbar-nav">
+                    <a class="navbar-brand" href="#">
+                        <img src="./img/user.png" alt="Logo" style="width:40px;" class="rounded-pill">
+                    </a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Cerrar sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container mt-3">
+            <h2></h2>
+            <p>Sección de comentarios y calificaciones.</p>
+            <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">Cerrar sesión</a>
+                    <a class="nav-link " href="agregarProducto.html">Mis productos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Mis comentarios</a>
                 </li>
             </ul>
+            <div class="table-container">
+                <table id="tabla" class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre del usuario</th>
+                            <th>Comentario</th>
+                        </tr>
+                    </thead>
+                    <tbody id="respuesta"></tbody>
+                </table>
+            </div>
         </div>
-    </nav>
-
-    <div class="container mt-3">
-        <h2></h2>
-        <p>Sección de comentarios y calificaciones.</p>
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link " href="agregarProducto.html">Mis productos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Mis comentarios</a>
-            </li>
-        </ul>
-        <table id="tabla" class="table table-dark table-striped">
-            <thead>
-                <tr>
-                    <th>Nombre del usuario</th>
-                    <th>Comentario</th>
-                </tr>
-            </thead>
-            <tbody id="respuesta"></tbody>
-        </table>
-    </div>
-    <script src="./js/comentariosSuper.js"></script>
-</body>
-<div id="espacio-en-blanco"></div>
-<footer class="footer">
-    <nav>
-        <a href="#" class="enlace"><img src="./img/logo4.png" alt="" class="logo2"/></a>
-        <a id="info">Contáctanos</a>
-        <a id="info2">Av. José Vasconcelos 208 Col. Condesa, Demarcación Territorial Cuauhtémoc 06140 Ciudad de México</a>
-        <a id="info3">Teléfono: (55) 5625 6700</a>
-        <a id="info4">Atención Ciudadana: 800 468 8722</a>
-    </nav>
-</footer>
+        <script src="./js/comentariosSuper.js"></script>
+    </body>
+    <div id="espacio-en-blanco"></div>
+    <footer class="footer">
+        <div class="footer-content">
+            <h3>ProFeCo</h3>
+            <p>Av. José Vasconcelos 208 Col. Condesa, Demarcación Territorial Cuauhtémoc 06140 Ciudad de México</p>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright &copy; 2023 <span>ProFeCo</span></p>
+        </div>
+    </footer>
 </html>
